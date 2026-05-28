@@ -1,10 +1,23 @@
-import { createContext, useContext, useState } from "react";
+import {
+  createContext,
+  useState,
+} from "react";
 
-const CartContext = createContext();
+const CartContext = createContext(null);
 
-export function CartProvider({ children }) {
+function CartProvider({ children }) {
 
   const [cartItems, setCartItems] = useState([]);
+
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  function openCart() {
+  setIsCartOpen(true);
+}
+
+function closeCart() {
+  setIsCartOpen(false);
+}
 
   // Add To Cart
   function addToCart(product) {
@@ -15,17 +28,18 @@ export function CartProvider({ children }) {
 
     if (existingProduct) {
 
-      const updatedCart = cartItems.map((item) =>
+      const updatedCart = cartItems.map((item) => {
 
-        item.id === product.id
+        if (item.id === product.id) {
 
-          ? {
-              ...item,
-              quantity: item.quantity + 1,
-            }
+          return {
+            ...item,
+            quantity: item.quantity + 1,
+          };
+        }
 
-          : item
-      );
+        return item;
+      });
 
       setCartItems(updatedCart);
 
@@ -38,11 +52,48 @@ export function CartProvider({ children }) {
           quantity: 1,
         },
       ]);
-
     }
   }
 
-  // Remove From Cart
+  function increaseQuantity(id) {
+
+  const updatedCart = cartItems.map((item) => {
+
+    if (item.id === id) {
+
+      return {
+        ...item,
+        quantity: item.quantity + 1,
+      };
+    }
+
+    return item;
+  });
+
+  setCartItems(updatedCart);
+}
+
+function decreaseQuantity(id) {
+
+  const updatedCart = cartItems
+    .map((item) => {
+
+      if (item.id === id) {
+
+        return {
+          ...item,
+          quantity: item.quantity - 1,
+        };
+      }
+
+      return item;
+    })
+    .filter((item) => item.quantity > 0);
+
+  setCartItems(updatedCart);
+}
+
+  // Remove
   function removeFromCart(id) {
 
     const updatedCart = cartItems.filter(
@@ -58,20 +109,26 @@ export function CartProvider({ children }) {
     0
   );
 
+  const value = {
+    cartItems,
+    addToCart,
+    removeFromCart,
+    totalItems,
+    isCartOpen,
+    openCart,
+    closeCart,
+    increaseQuantity,
+    decreaseQuantity,
+  };
+
   return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        addToCart,
-        removeFromCart,
-        totalItems,
-      }}
-    >
+    <CartContext.Provider value={value}>
       {children}
     </CartContext.Provider>
   );
 }
 
-export function useCart() {
-  return useContext(CartContext);
-}
+export {
+  CartProvider,
+  CartContext,
+};

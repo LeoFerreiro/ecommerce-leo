@@ -10,6 +10,8 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import { CartProvider } from "./context/CartContext";
 
+import CartDrawer from "./components/CartDrawer";
+
 function App() {
   return (
     
@@ -18,11 +20,13 @@ function App() {
       <div className="min-h-screen
                       bg-[#F8FAFC]
                       text-[#0F172A]
-                      overflow-x-hidden
-                      pt-24"
+                      relative"
       >
 
         <Navbar />
+        <CartDrawer />
+
+        <div className="h-16" />
 
         <Routes>
           <Route path="/" element={<Home />} />

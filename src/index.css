@@ -9,11 +9,18 @@
   font-family: 'Poppins', sans-serif;
 }
 
-body {
-  background: #020617;
-  color: white;
+html,
+body,
+#root {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+body {
+  background: #020617;
+  color: white;
 }

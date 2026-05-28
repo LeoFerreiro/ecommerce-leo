@@ -55,14 +55,10 @@ function Products() {
   });
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20">
+    <section className="w-full px-6 md:px-10 xl:px-16 py-20">
 
       {/* Header */}
       <div className="mb-14">
-
-        <p className="text-violet-600">
-          Productos
-        </p>
 
         <h1 className="text-5xl font-bold mt-4">
           Nuestra colección

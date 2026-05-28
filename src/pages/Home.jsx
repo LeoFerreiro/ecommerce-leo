@@ -8,11 +8,14 @@ function Home() {
   const [search, setSearch] = useState("");
 
   return (
+
+    <main className="pt-10">
+
     <div>
       <HeroSlider />
 
        {/* Search */}
-      <div className="max-w-3xl mx-auto px-6 -mt-10 relative z-20">
+      <div className="max-w-3xl mx-auto px-6 relative z-20">
 
         <SearchBar
           search={search}
@@ -25,6 +28,8 @@ function Home() {
 
       <Categories />
     </div>
+
+    </main>
   );
 }
 
