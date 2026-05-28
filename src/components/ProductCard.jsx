@@ -1,7 +1,11 @@
 import { motion } from "framer-motion";
 import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "../context/CartContext";
 
 function ProductCard({ product }) {
+
+  const { addToCart } = useCart();
+
   return (
     <motion.div
       whileHover={{ y: -10 }}
@@ -47,7 +51,7 @@ function ProductCard({ product }) {
             ${product.price}
           </span>
 
-          <button
+          <button onClick={() => addToCart(product)}
             className="w-12 h-12 rounded-full
             bg-violet-600 hover:bg-violet-700
             flex items-center justify-center

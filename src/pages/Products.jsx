@@ -1,13 +1,66 @@
-import products from "../data/products";
+import { useEffect, useState } from "react";
+
 import ProductsGrid from "../components/ProductsGrid";
+import LoadingSkeleton from "../components/LoadingSkeleton";
+import SearchBar from "../components/SearchBar";
+import CategoryFilter from "../components/CategoryFilter";
+
+import { getProducts } from "../services/api";
 
 function Products() {
+
+  const [products, setProducts] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [search, setSearch] = useState("");
+
+  const [selectedCategory, setSelectedCategory] =
+    useState("all");
+
+  useEffect(() => {
+
+    async function loadProducts() {
+
+      const data = await getProducts();
+
+      setProducts(data);
+
+      setLoading(false);
+    }
+
+    loadProducts();
+
+  }, []);
+
+  // Categories
+  const categories = [
+    ...new Set(
+      products.map((product) => product.category)
+    ),
+  ];
+
+  // Filtered Products
+  const filteredProducts = products.filter((product) => {
+
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
+    const matchesCategory =
+      selectedCategory === "all" ||
+      product.category === selectedCategory;
+
+    return matchesSearch && matchesCategory;
+  });
+
   return (
     <section className="max-w-7xl mx-auto px-6 py-20">
 
+      {/* Header */}
       <div className="mb-14">
 
-        <p className="text-blue-400">
+        <p className="text-violet-600">
           Productos
         </p>
 
@@ -17,7 +70,46 @@ function Products() {
 
       </div>
 
-      <ProductsGrid products={products} />
+      {/* Search */}
+      <div className="mb-10">
+
+        <SearchBar
+          search={search}
+          setSearch={setSearch}
+        />
+
+      </div>
+
+      {/* Categories */}
+      <CategoryFilter
+        categories={categories}
+        selectedCategory={selectedCategory}
+        setSelectedCategory={setSelectedCategory}
+      />
+
+      {/* Products */}
+      {loading ? (
+
+        <div
+          className="grid
+          grid-cols-1
+          sm:grid-cols-2
+          lg:grid-cols-3
+          xl:grid-cols-4
+          gap-8"
+        >
+
+          {[...Array(8)].map((_, index) => (
+            <LoadingSkeleton key={index} />
+          ))}
+
+        </div>
+
+      ) : (
+
+        <ProductsGrid products={filteredProducts} />
+
+      )}
 
     </section>
   );

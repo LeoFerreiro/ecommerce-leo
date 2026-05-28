@@ -8,11 +8,19 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import { CartProvider } from "./context/CartContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen bg-[#F8FAFC] text-[#0F172A]">
+    
+    <CartProvider>
+      <BrowserRouter>
+      <div className="min-h-screen
+                      bg-[#F8FAFC]
+                      text-[#0F172A]
+                      overflow-x-hidden
+                      pt-24"
+      >
 
         <Navbar />
 
@@ -27,7 +35,8 @@ function App() {
         <Footer />
 
       </div>
-    </BrowserRouter>
+      </BrowserRouter>
+    </CartProvider>
   );
 }
 
