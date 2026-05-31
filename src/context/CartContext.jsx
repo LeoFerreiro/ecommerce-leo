@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+
 import {
   createContext,
   useState,
@@ -7,7 +10,14 @@ const CartContext = createContext(null);
 
 function CartProvider({ children }) {
 
-  const [cartItems, setCartItems] = useState([]);
+  const [cartItems, setCartItems] = useState(() => {
+
+  const savedCart = localStorage.getItem("cart");
+
+  return savedCart
+    ? JSON.parse(savedCart)
+    : [];
+});
 
   const [isCartOpen, setIsCartOpen] = useState(false);
 
@@ -18,6 +28,15 @@ function CartProvider({ children }) {
 function closeCart() {
   setIsCartOpen(false);
 }
+
+useEffect(() => {
+
+  localStorage.setItem(
+    "cart",
+    JSON.stringify(cartItems)
+  );
+
+}, [cartItems]);
 
   // Add To Cart
   function addToCart(product) {
@@ -42,6 +61,7 @@ function closeCart() {
       });
 
       setCartItems(updatedCart);
+      toast.success("Producto agregado al carrito");
 
     } else {
 
@@ -71,6 +91,7 @@ function closeCart() {
   });
 
   setCartItems(updatedCart);
+  toast.success("Producto agregado");
 }
 
 function decreaseQuantity(id) {
@@ -91,6 +112,7 @@ function decreaseQuantity(id) {
     .filter((item) => item.quantity > 0);
 
   setCartItems(updatedCart);
+  toast.error("Producto reducido");
 }
 
   // Remove
@@ -101,7 +123,13 @@ function decreaseQuantity(id) {
     );
 
     setCartItems(updatedCart);
+    toast.info("Producto eliminado");
   }
+
+  function clearCart() {
+  setCartItems([]);
+  localStorage.removeItem("cart");
+}
 
   // Total Items
   const totalItems = cartItems.reduce(
@@ -119,6 +147,7 @@ function decreaseQuantity(id) {
     closeCart,
     increaseQuantity,
     decreaseQuantity,
+    clearCart,
   };
 
   return (

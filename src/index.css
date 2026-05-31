@@ -21,6 +21,9 @@ html {
 }
 
 body {
-  background: #020617;
-  color: white;
+  background: #F8FAFC;
+  color: #0F172A;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
 }

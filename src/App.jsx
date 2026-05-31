@@ -9,19 +9,29 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import { CartProvider } from "./context/CartContext";
+import useTheme from "./hooks/useTheme";
 
 import CartDrawer from "./components/CartDrawer";
 
 function App() {
+  const { theme } = useTheme();
   return (
     
     <CartProvider>
       <BrowserRouter>
-      <div className="min-h-screen
-                      bg-[#F8FAFC]
-                      text-[#0F172A]
-                      relative"
-      >
+      <div
+  className={`
+    min-h-screen
+    transition-colors
+    duration-300
+    relative
+    ${
+      theme === "dark"
+        ? "bg-[#020617] text-white"
+        : "bg-[#F8FAFC] text-[#0F172A]"
+    }
+  `}
+>
 
         <Navbar />
         <CartDrawer />

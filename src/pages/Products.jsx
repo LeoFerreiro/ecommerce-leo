@@ -7,6 +7,8 @@ import CategoryFilter from "../components/CategoryFilter";
 
 import { getProducts } from "../services/api";
 
+
+
 function Products() {
 
   const [products, setProducts] = useState([]);
@@ -21,6 +23,8 @@ function Products() {
   useEffect(() => {
 
     async function loadProducts() {
+
+      setLoading(true);
 
       const data = await getProducts();
 

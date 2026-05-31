@@ -2,9 +2,18 @@ import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import useCart from "../hooks/useCart";
 
+import { FaMoon, FaSun } from "react-icons/fa";
+
+import useTheme from "../hooks/useTheme";
+
 function Navbar() {
 
   const { totalItems,openCart,} = useCart();
+ 
+  const {
+  theme,
+  toggleTheme,
+} = useTheme();
 
 
   return (
@@ -44,6 +53,20 @@ function Navbar() {
           >
             Productos
           </Link>
+
+          <button
+              onClick={toggleTheme}
+              className="
+              text-xl
+              hover:text-violet-600
+              transition
+              "
+              >
+              {theme === "dark"
+                ? <FaSun />
+                : <FaMoon />
+              }
+            </button>
 
           <button
             onClick={openCart}
