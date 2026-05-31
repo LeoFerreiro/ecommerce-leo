@@ -7,7 +7,6 @@ import { FaMoon, FaSun } from "react-icons/fa";
 import useTheme from "../hooks/useTheme";
 
 function Navbar() {
-
   const { totalItems,openCart,} = useCart();
  
   const {
@@ -18,10 +17,17 @@ function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 left-0 w-full z-50
-      bg-[#F8FAFC]/90 backdrop-blur-md
-      border-b border-black/5"
-    >
+  className={`
+    fixed top-0 left-0 w-full z-50
+    backdrop-blur-md
+    transition-colors duration-300
+    ${
+      theme === "dark"
+        ? "bg-slate-900/90 border-b border-white/10 text-white"
+        : "bg-[#F8FAFC]/90 border-b border-black/5 text-slate-900"
+    }
+  `}
+>
       <div
          className="max-w-7xl w-full mx-auto h-16
          px-6 flex items-center justify-between
@@ -30,7 +36,16 @@ function Navbar() {
 
         <Link
           to="/"
-          className="text-2xl font-bold"
+          className={`
+          text-2xl
+          font-bold
+          transition-colors
+          ${
+            theme === "dark"
+            ? "text-white"
+            : "text-slate-900"
+          }
+          `}
         >
           Leo
           <span className="text-violet-600">
@@ -56,11 +71,16 @@ function Navbar() {
 
           <button
               onClick={toggleTheme}
-              className="
+              className={`
               text-xl
-              hover:text-violet-600
               transition
-              "
+              hover:text-violet-600
+              ${
+                theme === "dark"
+                ? "text-yellow-400"
+                : "text-slate-700"
+                }
+              `}
               >
               {theme === "dark"
                 ? <FaSun />
@@ -70,12 +90,17 @@ function Navbar() {
 
           <button
             onClick={openCart}
-            className="
+            className={`
             relative
             text-2xl
-            hover:text-violet-600
             transition
-            "
+            hover:text-violet-600
+            ${
+              theme === "dark"
+              ? "text-white"
+              : "text-slate-900"
+            }
+          `}
           >
 
           <FaShoppingCart />
