@@ -1,10 +1,7 @@
+import { FaChevronDown, FaShoppingBag, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { FaShoppingBag, FaUserCircle } from "react-icons/fa";
 
-import {
-  mainNavigationLinks,
-  quickNavigationLinks,
-} from "../config/navigation";
+import { mainNavigationItems } from "../config/navigation";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
 
@@ -15,20 +12,14 @@ function Navbar() {
   return (
     <header className="fixed left-0 top-0 z-50 w-full border-b border-[#dfe8d7] bg-white/95 shadow-sm backdrop-blur-xl">
       <div className="section-shell">
-        <div className="flex min-h-16 flex-wrap items-center justify-between gap-4 py-3">
+        <div className="flex min-h-20 flex-wrap items-center justify-between gap-4 py-3">
           <Link to="/" className="text-2xl font-extrabold text-[#0f1f16]">
             Verde<span className="text-[#1f7a3a]">Sport</span>
           </Link>
 
-          <nav className="hidden items-center gap-5 text-sm font-semibold text-[#1f2a22] lg:flex">
-            {mainNavigationLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.to}
-                className="transition hover:text-[#1f7a3a]"
-              >
-                {link.label}
-              </Link>
+          <nav className="hidden items-stretch gap-1 text-sm font-semibold text-[#1f2a22] lg:flex">
+            {mainNavigationItems.map((item) => (
+              <NavDropdown key={item.label} item={item} />
             ))}
           </nav>
 
@@ -66,20 +57,51 @@ function Navbar() {
             </button>
           </div>
         </div>
-
-        <nav className="flex gap-3 overflow-x-auto border-t border-[#edf2e8] py-2 text-xs font-semibold text-[#667369]">
-          {quickNavigationLinks.map((link) => (
-            <Link
-              key={link.label}
-              to={link.to}
-              className="shrink-0 rounded-full px-3 py-1 transition hover:bg-[#e8f3e5] hover:text-[#1f7a3a]"
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
       </div>
     </header>
+  );
+}
+
+function NavDropdown({ item }) {
+  return (
+    <div className="group relative flex items-center">
+      <Link
+        to={item.to}
+        className="inline-flex items-center gap-2 rounded-lg px-3 py-3 transition hover:bg-[#e8f3e5] hover:text-[#1f7a3a] focus:bg-[#e8f3e5] focus:text-[#1f7a3a]"
+      >
+        {item.label}
+        {item.columns?.length > 0 && <FaChevronDown className="text-xs" />}
+      </Link>
+
+      {item.columns?.length > 0 && (
+        <div className="invisible absolute left-1/2 top-full w-[620px] -translate-x-1/2 pt-3 opacity-0 transition duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+          <div className="grid gap-6 rounded-lg border border-[#d7e3d2] bg-white p-6 shadow-2xl md:grid-cols-3">
+            {item.columns.map((column) => (
+              <div key={column.title}>
+                <Link
+                  to={column.to}
+                  className="mb-3 block text-sm font-extrabold uppercase tracking-wide text-[#102116] transition hover:text-[#1f7a3a]"
+                >
+                  {column.title}
+                </Link>
+
+                <div className="grid gap-2">
+                  {column.links.map((link) => (
+                    <Link
+                      key={link.label}
+                      to={link.to}
+                      className="rounded-md px-2 py-2 text-sm font-semibold text-[#667369] transition hover:bg-[#e8f3e5] hover:text-[#1f7a3a]"
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 

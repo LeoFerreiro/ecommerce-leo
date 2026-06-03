@@ -11,6 +11,16 @@ import { getInitialFiltersFromSearchParams } from "../utils/productFilters";
 
 function Products() {
   const [searchParams] = useSearchParams();
+
+  return (
+    <ProductsCatalog
+      key={searchParams.toString()}
+      initialFilters={getInitialFiltersFromSearchParams(searchParams)}
+    />
+  );
+}
+
+function ProductsCatalog({ initialFilters }) {
   const { products, loading, error } = useProducts();
   const {
     filters,
@@ -18,9 +28,7 @@ function Products() {
     filteredProducts,
     updateFilter,
     resetFilters,
-  } = useProductFilters(products, {
-    ...getInitialFiltersFromSearchParams(searchParams),
-  });
+  } = useProductFilters(products, initialFilters);
 
   return (
     <section className="section-shell py-20">
