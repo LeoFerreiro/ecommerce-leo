@@ -1,21 +1,9 @@
+import products from "../data/products";
+
 export async function getProducts() {
-
-  const response = await fetch(
-    "https://fakestoreapi.com/products"
-  );
-
-  const data = await response.json();
-
-  return data;
+  return products;
 }
 
 export async function getProduct(id) {
-
-  const response = await fetch(
-    `https://fakestoreapi.com/products/${id}`
-  );
-
-  const data = await response.json();
-
-  return data;
+  return products.find((product) => product.id === Number(id));
 }

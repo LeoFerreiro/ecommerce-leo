@@ -1,28 +1,14 @@
-import useTheme from "../../hooks/useTheme";
-
 function ProductsEmptyState({ onResetFilters }) {
-  const { theme } = useTheme();
-
   return (
-    <div
-      className={`rounded-lg border p-10 text-center ${
-        theme === "dark"
-          ? "bg-slate-900 border-white/10"
-          : "bg-white border-black/5"
-      }`}
-    >
-      <h2 className="text-2xl font-bold">No encontramos productos</h2>
-      <p
-        className={`mt-3 ${
-          theme === "dark" ? "text-slate-300" : "text-slate-500"
-        }`}
-      >
-        Proba con otra busqueda, categoria o rango de precios.
+    <div className="rounded-lg border border-[#d7e3d2] bg-white p-10 text-center">
+      <h2 className="text-2xl font-extrabold">No encontramos productos</h2>
+      <p className="mt-3 text-[#667369]">
+        Proba con otra seccion, marca, deporte o rango de precios.
       </p>
 
       <button
         onClick={onResetFilters}
-        className="mt-6 rounded-lg bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-700"
+        className="mt-6 rounded-lg bg-[#102116] px-6 py-3 font-bold text-white transition hover:bg-[#1f7a3a]"
       >
         Limpiar filtros
       </button>

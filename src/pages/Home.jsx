@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+import BrandSportSections from "../components/BrandSportSections";
 import Categories from "../components/Categories";
 import FeaturedProducts from "../components/FeaturedProducts";
 import HeroSlider from "../components/HeroSlider";
@@ -22,18 +23,19 @@ function Home() {
   }
 
   return (
-    <main className="pt-10">
+    <main>
       <HeroSlider />
 
       <form
         onSubmit={handleSearchSubmit}
-        className="relative z-20 mx-auto mt-[-32px] max-w-3xl px-8 md:px-10"
+        className="section-shell relative z-20 mt-[-32px] max-w-3xl"
       >
         <SearchBar search={search} setSearch={setSearch} />
       </form>
 
       <FeaturedProducts />
       <Categories />
+      <BrandSportSections />
     </main>
   );
 }

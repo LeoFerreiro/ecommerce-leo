@@ -7,26 +7,27 @@ import ProductsHeader from "../components/products/ProductsHeader";
 import ProductsLoadingGrid from "../components/products/ProductsLoadingGrid";
 import useProductFilters from "../hooks/useProductFilters";
 import useProducts from "../hooks/useProducts";
-import useTheme from "../hooks/useTheme";
+import { getInitialFiltersFromSearchParams } from "../utils/productFilters";
 
 function Products() {
-  const { theme } = useTheme();
   const [searchParams] = useSearchParams();
   const { products, loading, error } = useProducts();
   const {
     filters,
-    categories,
+    filterOptions,
     filteredProducts,
     updateFilter,
     resetFilters,
-  } = useProductFilters(products, searchParams.get("search") || "");
+  } = useProductFilters(products, {
+    ...getInitialFiltersFromSearchParams(searchParams),
+  });
 
   return (
-    <section className="w-full px-8 py-20 md:px-10 xl:px-16">
+    <section className="section-shell py-20">
       <ProductsHeader />
 
       <ProductFilters
-        categories={categories}
+        filterOptions={filterOptions}
         filters={filters}
         onFilterChange={updateFilter}
         onResetFilters={resetFilters}
@@ -34,13 +35,7 @@ function Products() {
       />
 
       {error && (
-        <div
-          className={`mb-8 rounded-lg border p-4 ${
-            theme === "dark"
-              ? "border-red-500/30 bg-red-500/10 text-red-100"
-              : "border-red-200 bg-red-50 text-red-800"
-          }`}
-        >
+        <div className="mb-8 rounded-lg border border-red-200 bg-red-50 p-4 text-red-800">
           {error}
         </div>
       )}

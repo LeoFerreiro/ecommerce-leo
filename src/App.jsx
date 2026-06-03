@@ -1,56 +1,37 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-
-import Home from "./pages/Home";
-import Products from "./pages/Products";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Register from "./pages/Register";
-import { CartProvider } from "./context/CartContext";
-import useTheme from "./hooks/useTheme";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import CartDrawer from "./components/CartDrawer";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import { CartProvider } from "./context/CartContext";
+import Cart from "./pages/Cart";
+import Checkout from "./pages/Checkout";
+import Home from "./pages/Home";
+import ProductDetails from "./pages/ProductDetails";
+import Products from "./pages/Products";
+import Register from "./pages/Register";
 
 function App() {
-  const { theme } = useTheme();
   return (
-    
     <CartProvider>
       <BrowserRouter>
-      <div
-  className={`
-    min-h-screen
-    transition-colors
-    duration-300
-    relative
-    ${
-      theme === "dark"
-        ? "bg-[#020617] text-white"
-        : "bg-[#F8FAFC] text-[#0F172A]"
-    }
-  `}
->
+        <div className="relative min-h-screen bg-[#f5f7f2] text-[#111813]">
+          <Navbar />
+          <CartDrawer />
 
-        <Navbar />
-        <CartDrawer />
+          <div className="h-24" />
 
-        <div className="h-16" />
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/product/:id" element={<ProductDetails />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/registro" element={<Register />} />
+          </Routes>
 
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/product/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/registro" element={<Register />} />
-        </Routes>
-
-        <Footer />
-
-      </div>
+          <Footer />
+        </div>
       </BrowserRouter>
     </CartProvider>
   );

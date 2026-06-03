@@ -1,24 +1,32 @@
-import useTheme from "../hooks/useTheme";
+import { Link } from "react-router-dom";
+
+import { footerNavigationLinks } from "../config/navigation";
 
 function Footer() {
-  const { theme } = useTheme();
-
   return (
-    <footer
-      className={`
-        mt-10 py-8
-        text-center
-        transition-colors
-        duration-300
+    <footer className="border-t border-[#d7e3d2] bg-white py-10">
+      <div className="section-shell flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div>
+          <p className="text-xl font-extrabold text-[#102116]">
+            Verde<span className="text-[#1f7a3a]">Sport</span>
+          </p>
+          <p className="mt-1 text-sm text-[#667369]">
+            Indumentaria deportiva demo - 2026.
+          </p>
+        </div>
 
-        ${
-          theme === "dark"
-            ? "border-t border-white/10 text-gray-400"
-            : "border-t border-black/10 text-gray-500"
-        }
-      `}
-    >
-      (c) 2026 LeoStore - Demo ecommerce.
+        <div className="flex flex-wrap gap-3 text-sm font-bold text-[#667369]">
+          {footerNavigationLinks.map((link) => (
+            <Link
+              key={link.label}
+              to={link.to}
+              className="hover:text-[#1f7a3a]"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+      </div>
     </footer>
   );
 }

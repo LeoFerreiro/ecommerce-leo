@@ -21,9 +21,25 @@ html {
 }
 
 body {
-  background: #F8FAFC;
-  color: #0F172A;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  background: #f5f7f2;
+  color: #111813;
+}
+
+button,
+a,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.section-shell {
+  width: min(100% - 64px, 1280px);
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  .section-shell {
+    width: min(100% - 32px, 1280px);
+  }
 }

@@ -1,49 +1,16 @@
 import { FaSearch } from "react-icons/fa";
-import useTheme from "../hooks/useTheme";
 
 function SearchBar({ search, setSearch }) {
-  const { theme } = useTheme();
-
   return (
-    <div
-      className={`
-        flex items-center gap-4
-        rounded-lg
-        px-5 py-4
-        transition-colors duration-300
-        shadow-sm
-
-        ${
-          theme === "dark"
-            ? "bg-slate-900 border border-white/10"
-            : "bg-white border border-black/5"
-        }
-      `}
-    >
-      <FaSearch
-        className={
-          theme === "dark"
-            ? "text-gray-400"
-            : "text-gray-500"
-        }
-      />
+    <div className="flex items-center gap-4 rounded-lg border border-[#d7e3d2] bg-white px-5 py-4 shadow-sm">
+      <FaSearch className="text-[#1f7a3a]" />
 
       <input
         type="text"
-        placeholder="Buscar productos..."
+        placeholder="Buscar indumentaria, marcas, deportes..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className={`
-          w-full
-          outline-none
-          bg-transparent
-
-          ${
-            theme === "dark"
-              ? "text-white placeholder:text-gray-400"
-              : "text-slate-900 placeholder:text-gray-500"
-          }
-        `}
+        className="w-full bg-transparent text-[#111813] outline-none placeholder:text-[#7b887e]"
       />
     </div>
   );

@@ -1,29 +1,17 @@
-import useTheme from "../hooks/useTheme";
-
 function CategoryFilter({
   categories,
   selectedCategory,
   setSelectedCategory,
 }) {
-  const { theme } = useTheme();
-
   return (
-    <div className="flex flex-wrap gap-4 mb-10">
+    <div className="mb-10 flex flex-wrap gap-4">
       <button
         onClick={() => setSelectedCategory("all")}
-        className={`
-          px-6 py-3
-          rounded-lg
-          transition
-
-          ${
-            selectedCategory === "all"
-              ? "bg-violet-600 text-white"
-              : theme === "dark"
-              ? "bg-slate-900 border border-white/10 text-gray-200 hover:border-violet-600"
-              : "bg-white border border-black/5 text-slate-900 hover:border-violet-600"
-          }
-        `}
+        className={`rounded-lg px-6 py-3 font-bold transition ${
+          selectedCategory === "all"
+            ? "bg-[#102116] text-white"
+            : "border border-[#d7e3d2] bg-white text-[#102116] hover:border-[#1f7a3a]"
+        }`}
       >
         Todos
       </button>
@@ -32,20 +20,11 @@ function CategoryFilter({
         <button
           key={category}
           onClick={() => setSelectedCategory(category)}
-          className={`
-            px-6 py-3
-            rounded-lg
-            transition
-            capitalize
-
-            ${
-              selectedCategory === category
-                ? "bg-violet-600 text-white"
-                : theme === "dark"
-                ? "bg-slate-900 border border-white/10 text-gray-200 hover:border-violet-600"
-                : "bg-white border border-black/5 text-slate-900 hover:border-violet-600"
-            }
-          `}
+          className={`rounded-lg px-6 py-3 font-bold capitalize transition ${
+            selectedCategory === category
+              ? "bg-[#102116] text-white"
+              : "border border-[#d7e3d2] bg-white text-[#102116] hover:border-[#1f7a3a]"
+          }`}
         >
           {category}
         </button>

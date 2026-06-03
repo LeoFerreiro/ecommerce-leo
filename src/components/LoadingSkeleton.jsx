@@ -1,32 +1,29 @@
 function LoadingSkeleton() {
   return (
     <div
-      className="bg-white rounded-lg
-      border border-black/5 p-5
-      animate-pulse"
+      className="animate-pulse rounded-lg border border-[#d7e3d2] bg-white p-5"
     >
 
       {/* Image */}
       <div
-        className="bg-gray-200
-        h-[250px] rounded-lg"
+        className="h-[250px] rounded-lg bg-[#dfe8d7]"
       />
 
       {/* Text */}
       <div className="mt-6">
 
         <div
-          className="h-4 bg-gray-200
+          className="h-4 bg-[#dfe8d7]
           rounded w-24"
         />
 
         <div
-          className="h-6 bg-gray-200
+          className="h-6 bg-[#dfe8d7]
           rounded w-full mt-4"
         />
 
         <div
-          className="h-6 bg-gray-200
+          className="h-6 bg-[#dfe8d7]
           rounded w-2/3 mt-3"
         />
 
@@ -37,13 +34,13 @@ function LoadingSkeleton() {
         >
 
           <div
-            className="h-8 bg-gray-200
+            className="h-8 bg-[#dfe8d7]
             rounded w-20"
           />
 
           <div
             className="w-12 h-12
-            rounded-lg bg-gray-200"
+            rounded-lg bg-[#dfe8d7]"
           />
 
         </div>

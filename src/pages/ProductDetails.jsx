@@ -1,18 +1,13 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-
-import { getProduct } from "../services/api";
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 
 import useCart from "../hooks/useCart";
-import useTheme from "../hooks/useTheme";
+import { getProduct } from "../services/api";
 
 function ProductDetails() {
   const { id } = useParams();
-
   const { addToCart } = useCart();
-  const { theme } = useTheme();
-
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
@@ -26,137 +21,76 @@ function ProductDetails() {
 
   if (!product) {
     return (
-      <div
-        className={`
-          min-h-screen
-          flex items-center justify-center
-          ${
-            theme === "dark"
-              ? "text-white"
-              : "text-slate-900"
-          }
-        `}
-      >
-        Loading...
+      <div className="flex min-h-screen items-center justify-center text-[#111813]">
+        Cargando producto...
       </div>
     );
   }
 
   return (
-    <section className="max-w-7xl mx-auto px-6 py-20">
-      <div className="grid lg:grid-cols-2 gap-20 items-center">
-
-        {/* Image */}
+    <section className="section-shell py-20">
+      <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
         <motion.div
-          initial={{ opacity: 0, x: -80 }}
+          initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          className={`
-            rounded-[40px]
-            p-20
-            transition-colors duration-300
-
-            ${
-              theme === "dark"
-                ? "bg-slate-900 border border-white/10"
-                : "bg-white border border-black/5"
-            }
-          `}
+          transition={{ duration: 0.6 }}
+          className="overflow-hidden rounded-lg border border-[#d7e3d2] bg-white"
         >
           <img
             src={product.image}
             alt={product.title}
-            className="
-              w-full
-              h-[500px]
-              object-contain
-            "
+            className="h-[560px] w-full object-cover"
           />
         </motion.div>
 
-        {/* Info */}
         <motion.div
-          initial={{ opacity: 0, x: 80 }}
+          initial={{ opacity: 0, x: 60 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6 }}
         >
-          <p
-            className={
-              theme === "dark"
-                ? "text-violet-400 capitalize"
-                : "text-violet-600 capitalize"
-            }
-          >
-            {product.category}
+          <p className="font-bold uppercase text-[#1f7a3a]">
+            {product.brand} / {product.sport}
           </p>
 
-          <h1
-            className={`
-              text-5xl
-              font-bold
-              mt-4
-              leading-tight
-
-              ${
-                theme === "dark"
-                  ? "text-white"
-                  : "text-slate-900"
-              }
-            `}
-          >
+          <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
             {product.title}
           </h1>
 
-          <p
-            className={`
-              text-lg
-              leading-8
-              mt-8
+          <p className="mt-5 text-lg capitalize text-[#667369]">
+            {product.audience} / {product.group} / {product.type} /{" "}
+            {product.category}
+          </p>
 
-              ${
-                theme === "dark"
-                  ? "text-gray-300"
-                  : "text-gray-500"
-              }
-            `}
-          >
+          <p className="mt-8 text-lg leading-8 text-[#4b574f]">
             {product.description}
           </p>
 
-          <div className="mt-10">
-            <span
-              className={`
-                text-5xl
-                font-bold
-
-                ${
-                  theme === "dark"
-                    ? "text-white"
-                    : "text-slate-900"
-                }
-              `}
-            >
+          <div className="mt-10 flex items-end gap-4">
+            {product.originalPrice && (
+              <span className="text-2xl font-bold text-[#8c978f] line-through">
+                ${product.originalPrice}
+              </span>
+            )}
+            <span className="text-5xl font-extrabold text-[#102116]">
               ${product.price}
             </span>
           </div>
 
-          <button
-            onClick={() => addToCart(product)}
-            className="
-              mt-10
-              px-10 py-5
-              rounded-2xl
-              bg-violet-600
-              hover:bg-violet-700
-              text-white
-              transition
-              font-semibold
-            "
-          >
-            Agregar al carrito
-          </button>
+          <div className="mt-10 flex flex-wrap gap-3">
+            <button
+              onClick={() => addToCart(product)}
+              className="rounded-lg bg-[#102116] px-8 py-4 font-bold text-white transition hover:bg-[#1f7a3a]"
+            >
+              Agregar al carrito
+            </button>
+            <Link
+              to={`/products?audience=${product.audience}&group=${product.group}&type=${product.type}`}
+              className="rounded-lg border border-[#d7e3d2] px-8 py-4 font-bold text-[#102116] transition hover:border-[#1f7a3a]"
+            >
+              Ver similares
+            </Link>
+          </div>
         </motion.div>
-
       </div>
     </section>
   );

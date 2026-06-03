@@ -1,87 +1,47 @@
-import { Swiper, SwiperSlide } from "swiper/react";
-
-import { Autoplay, Pagination } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/pagination";
-
-import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-
-const slides = [
-  {
-    id: 1,
-    title: "Tecnologia Premium",
-    subtitle: "Descubri productos elegidos para trabajar, jugar y crear mejor.",
-    image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9",
-  },
-  {
-    id: 2,
-    title: "Gaming Setup",
-    subtitle: "Equipamiento profesional para gamers.",
-    image: "https://images.unsplash.com/photo-1545239351-1141bd82e8a6",
-  },
-  {
-    id: 3,
-    title: "Smart Devices",
-    subtitle: "Innovacion y diseno en un solo lugar.",
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-  },
-];
 
 function HeroSlider() {
   return (
-    <section className="px-4 pt-6 sm:px-6">
-      <Swiper
-        modules={[Autoplay, Pagination]}
-        autoplay={{
-          delay: 4000,
-          disableOnInteraction: false,
-        }}
-        pagination={{ clickable: true }}
-        loop={true}
-        className="overflow-hidden rounded-lg"
-      >
-        {slides.map((slide) => (
-          <SwiperSlide key={slide.id}>
-            <div className="relative flex min-h-[520px] items-center md:min-h-[620px]">
-              <img
-                src={slide.image}
-                alt={slide.title}
-                className="absolute inset-0 h-full w-full object-cover"
-              />
+    <section className="section-shell pt-8">
+      <div className="relative min-h-[560px] overflow-hidden rounded-lg bg-[#102116]">
+        <img
+          src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1800&q=80"
+          alt="Indumentaria deportiva premium"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
+        />
 
-              <div className="absolute inset-0 bg-slate-950/60" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#08120c] via-[#08120c]/70 to-transparent" />
 
-              <motion.div
-                initial={{ opacity: 0, y: 80 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 1 }}
-                className="relative z-10 mx-auto max-w-7xl px-6 text-white md:px-10"
-              >
-                <p className="mb-5 text-sm font-semibold text-violet-300 md:text-base">
-                  LeoStore Demo
-                </p>
+        <div className="relative z-10 flex min-h-[560px] max-w-2xl flex-col justify-center px-6 py-16 text-white md:px-12">
+          <p className="mb-5 font-semibold text-[#88d68f]">
+            Nueva temporada deportiva
+          </p>
 
-                <h1 className="max-w-3xl text-4xl font-extrabold leading-tight md:text-6xl">
-                  {slide.title}
-                </h1>
+          <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">
+            Indumentaria, calzado y accesorios para moverte mejor.
+          </h1>
 
-                <p className="mt-6 max-w-2xl text-lg text-gray-200 md:text-xl">
-                  {slide.subtitle}
-                </p>
+          <p className="mt-6 text-lg leading-8 text-white/80">
+            Colecciones para hombre, mujer y kids con seleccion de Nike,
+            Adidas, Puma y mas marcas para entrenamiento, running y lifestyle.
+          </p>
 
-                <Link
-                  to="/products"
-                  className="mt-9 inline-flex rounded-lg bg-violet-600 px-7 py-4 font-semibold text-white transition hover:bg-violet-700"
-                >
-                  Comprar ahora
-                </Link>
-              </motion.div>
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
+          <div className="mt-9 flex flex-wrap gap-3">
+            <Link
+              to="/products?promo=launch"
+              className="rounded-lg bg-[#59c36a] px-6 py-4 font-bold text-[#102116] transition hover:bg-white"
+            >
+              Ver lanzamientos
+            </Link>
+            <Link
+              to="/products?promo=sale"
+              className="rounded-lg border border-white/30 px-6 py-4 font-bold text-white transition hover:border-white hover:bg-white hover:text-[#102116]"
+            >
+              Comprar sale
+            </Link>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

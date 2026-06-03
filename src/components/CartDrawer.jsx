@@ -1,14 +1,11 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
 import useCart from "../hooks/useCart";
-import useTheme from "../hooks/useTheme";
 
 function CartDrawer() {
-  const { theme } = useTheme();
-
   const {
     isCartOpen,
     closeCart,
@@ -24,11 +21,7 @@ function CartDrawer() {
   );
 
   useEffect(() => {
-    if (isCartOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
-    }
+    document.body.style.overflow = isCartOpen ? "hidden" : "auto";
 
     return () => {
       document.body.style.overflow = "auto";
@@ -39,196 +32,69 @@ function CartDrawer() {
     <AnimatePresence>
       {isCartOpen && (
         <>
-          {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={closeCart}
-            className="
-              fixed inset-0
-              bg-black/50
-              backdrop-blur-sm
-              z-40
-            "
+            className="fixed inset-0 z-40 bg-black/55 backdrop-blur-sm"
           />
 
-          {/* Drawer */}
-          <motion.div
-            initial={{ x: 400 }}
+          <motion.aside
+            initial={{ x: 420 }}
             animate={{ x: 0 }}
-            exit={{ x: 400 }}
-            transition={{
-              type: "spring",
-              damping: 25,
-              stiffness: 200,
-            }}
-            className={`
-              fixed top-0 right-0 bottom-0
-              w-full sm:w-[380px]
-              z-[9999]
-              shadow-2xl
-              p-6
-              flex flex-col
-              overflow-hidden
-              ${
-                theme === "dark"
-                  ? "bg-slate-900 text-white"
-                  : "bg-white text-slate-900"
-              }
-            `}
+            exit={{ x: 420 }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed bottom-0 right-0 top-0 z-[9999] flex w-full flex-col overflow-hidden bg-white p-6 text-[#111813] shadow-2xl sm:w-[420px]"
           >
-            {/* Header */}
-            <div
-              className={`
-                flex items-center justify-between
-                pb-4
-                ${
-                  theme === "dark"
-                    ? "border-b border-white/10"
-                    : "border-b border-black/10"
-                }
-              `}
-            >
-              <h2 className="text-2xl font-bold">
-                Tu carrito
-              </h2>
+            <div className="flex items-center justify-between border-b border-[#d7e3d2] pb-4">
+              <h2 className="text-2xl font-extrabold">Tu carrito</h2>
 
               <button
                 onClick={closeCart}
-                className="
-                  text-2xl
-                  hover:text-violet-600
-                  transition
-                "
+                className="text-2xl transition hover:text-[#1f7a3a]"
               >
                 <FaTimes />
               </button>
             </div>
 
-            {/* Empty */}
             {cartItems.length === 0 ? (
-              <div
-                className={`
-                  flex-1
-                  flex items-center justify-center
-                  ${
-                    theme === "dark"
-                      ? "text-gray-400"
-                      : "text-gray-500"
-                  }
-                `}
-              >
-                Tu carrito está vacío
+              <div className="flex flex-1 items-center justify-center text-[#667369]">
+                Tu carrito esta vacio
               </div>
             ) : (
               <>
-                {/* Items */}
-                <div
-                  className="
-                    flex-1
-                    min-h-0
-                    overflow-y-auto
-                    p-4
-                    space-y-4
-                  "
-                >
+                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto py-5">
                   {cartItems.map((item) => (
                     <div
                       key={item.id}
-                      className={`
-                        flex gap-4
-                        rounded-2xl
-                        p-4
-                        ${
-                          theme === "dark"
-                            ? "border border-white/10"
-                            : "border border-black/5"
-                        }
-                      `}
+                      className="flex gap-4 rounded-lg border border-[#d7e3d2] p-4"
                     >
-                      <div
-                        className={`
-                          w-20 h-20
-                          rounded-xl
-                          p-2
-                          shrink-0
-                          ${
-                            theme === "dark"
-                              ? "bg-slate-800"
-                              : "bg-gray-100"
-                          }
-                        `}
-                      >
+                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-[#e8f3e5]">
                         <img
                           src={item.image}
                           alt={item.title}
-                          className="
-                            w-full h-full
-                            object-contain
-                          "
+                          className="h-full w-full object-cover"
                         />
                       </div>
 
-                      <div className="flex-1 min-w-0">
-                        <h3
-                          className="
-                            font-semibold
-                            line-clamp-2
-                          "
-                        >
-                          {item.title}
-                        </h3>
-
-                        <p className="text-violet-600 mt-2">
+                      <div className="min-w-0 flex-1">
+                        <h3 className="line-clamp-2 font-bold">{item.title}</h3>
+                        <p className="mt-1 text-sm font-semibold text-[#1f7a3a]">
                           ${item.price}
                         </p>
 
-                        <div
-                          className="
-                            flex items-center
-                            gap-3
-                            mt-3
-                          "
-                        >
+                        <div className="mt-3 flex items-center gap-3">
                           <button
-                            onClick={() =>
-                              decreaseQuantity(item.id)
-                            }
-                            className={`
-                              w-8 h-8
-                              rounded-full
-                              flex items-center justify-center
-                              transition
-                              ${
-                                theme === "dark"
-                                  ? "border border-white/10 hover:bg-slate-800"
-                                  : "border border-black/10 hover:bg-gray-100"
-                              }
-                            `}
+                            onClick={() => decreaseQuantity(item.id)}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
                           >
                             -
                           </button>
-
-                          <span className="font-semibold">
-                            {item.quantity}
-                          </span>
-
+                          <span className="font-bold">{item.quantity}</span>
                           <button
-                            onClick={() =>
-                              increaseQuantity(item.id)
-                            }
-                            className={`
-                              w-8 h-8
-                              rounded-full
-                              flex items-center justify-center
-                              transition
-                              ${
-                                theme === "dark"
-                                  ? "border border-white/10 hover:bg-slate-800"
-                                  : "border border-black/10 hover:bg-gray-100"
-                              }
-                            `}
+                            onClick={() => increaseQuantity(item.id)}
+                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
                           >
                             +
                           </button>
@@ -236,14 +102,8 @@ function CartDrawer() {
                       </div>
 
                       <button
-                        onClick={() =>
-                          removeFromCart(item.id)
-                        }
-                        className="
-                          text-red-500
-                          hover:text-red-700
-                          transition
-                        "
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-red-500 transition hover:text-red-700"
                       >
                         <FaTrash />
                       </button>
@@ -251,35 +111,10 @@ function CartDrawer() {
                   ))}
                 </div>
 
-                {/* Footer */}
-                <div
-                  className={`
-                    pt-6
-                    ${
-                      theme === "dark"
-                        ? "border-t border-white/10"
-                        : "border-t border-black/10"
-                    }
-                  `}
-                >
-                  <div
-                    className="
-                      flex items-center
-                      justify-between
-                      mb-6
-                    "
-                  >
-                    <span
-                      className={
-                        theme === "dark"
-                          ? "text-gray-300"
-                          : "text-gray-500"
-                      }
-                    >
-                      Total
-                    </span>
-
-                    <span className="text-3xl font-bold">
+                <div className="border-t border-[#d7e3d2] pt-6">
+                  <div className="mb-6 flex items-center justify-between">
+                    <span className="text-[#667369]">Total</span>
+                    <span className="text-3xl font-extrabold">
                       ${totalPrice.toFixed(2)}
                     </span>
                   </div>
@@ -287,25 +122,14 @@ function CartDrawer() {
                   <Link
                     to="/checkout"
                     onClick={closeCart}
-                    className="
-                      block
-                      text-center
-                      w-full
-                      bg-violet-600
-                      hover:bg-violet-700
-                      text-white
-                      py-4
-                      rounded-2xl
-                      transition
-                      font-semibold
-                    "
+                    className="block w-full rounded-lg bg-[#102116] py-4 text-center font-bold text-white transition hover:bg-[#1f7a3a]"
                   >
                     Finalizar compra
                   </Link>
                 </div>
               </>
             )}
-          </motion.div>
+          </motion.aside>
         </>
       )}
     </AnimatePresence>

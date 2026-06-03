@@ -3,19 +3,19 @@ function ProductSkeleton() {
     <div
       className="
       bg-white
-      rounded-2xl
+      rounded-lg
       p-4
-      shadow-md
+      border border-[#d7e3d2]
       animate-pulse
       "
     >
-      <div className="h-48 bg-gray-200 rounded-xl mb-4" />
+      <div className="mb-4 h-48 rounded-lg bg-[#dfe8d7]" />
 
-      <div className="h-4 bg-gray-200 rounded mb-2" />
+      <div className="mb-2 h-4 rounded bg-[#dfe8d7]" />
 
-      <div className="h-4 bg-gray-200 rounded w-2/3 mb-4" />
+      <div className="mb-4 h-4 w-2/3 rounded bg-[#dfe8d7]" />
 
-      <div className="h-8 bg-gray-200 rounded" />
+      <div className="h-8 rounded bg-[#dfe8d7]" />
     </div>
   );
 }

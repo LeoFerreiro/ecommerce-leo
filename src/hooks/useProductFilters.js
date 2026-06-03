@@ -1,64 +1,26 @@
 import { useMemo, useState } from "react";
 
-const initialFilters = {
-  search: "",
-  category: "all",
-  sort: "featured",
-  minPrice: "",
-  maxPrice: "",
-};
+import { defaultProductFilters } from "../constants/productFilters";
+import {
+  filterProducts,
+  getProductFilterOptions,
+  sortProducts,
+} from "../utils/productFilters";
 
-function useProductFilters(products, initialSearch = "") {
+function useProductFilters(products, initialFilters = {}) {
   const [filters, setFilters] = useState({
+    ...defaultProductFilters,
     ...initialFilters,
-    search: initialSearch,
   });
 
-  const categories = useMemo(
-    () => [...new Set(products.map((product) => product.category))],
+  const filterOptions = useMemo(
+    () => getProductFilterOptions(products),
     [products]
   );
 
   const filteredProducts = useMemo(() => {
-    const minPrice = Number(filters.minPrice) || 0;
-    const maxPrice = Number(filters.maxPrice) || Infinity;
-    const normalizedSearch = filters.search.trim().toLowerCase();
-
-    const matchesFilters = products.filter((product) => {
-      const title = product.title.toLowerCase();
-      const description = product.description?.toLowerCase() || "";
-      const category = product.category.toLowerCase();
-
-      const matchesSearch =
-        !normalizedSearch ||
-        title.includes(normalizedSearch) ||
-        description.includes(normalizedSearch) ||
-        category.includes(normalizedSearch);
-
-      const matchesCategory =
-        filters.category === "all" || product.category === filters.category;
-
-      const matchesPrice =
-        product.price >= minPrice && product.price <= maxPrice;
-
-      return matchesSearch && matchesCategory && matchesPrice;
-    });
-
-    return [...matchesFilters].sort((a, b) => {
-      if (filters.sort === "price-asc") {
-        return a.price - b.price;
-      }
-
-      if (filters.sort === "price-desc") {
-        return b.price - a.price;
-      }
-
-      if (filters.sort === "name") {
-        return a.title.localeCompare(b.title);
-      }
-
-      return 0;
-    });
+    const matchingProducts = filterProducts(products, filters);
+    return sortProducts(matchingProducts, filters.sort);
   }, [filters, products]);
 
   function updateFilter(name, value) {
@@ -69,12 +31,12 @@ function useProductFilters(products, initialSearch = "") {
   }
 
   function resetFilters() {
-    setFilters(initialFilters);
+    setFilters(defaultProductFilters);
   }
 
   return {
     filters,
-    categories,
+    filterOptions,
     filteredProducts,
     updateFilter,
     resetFilters,
