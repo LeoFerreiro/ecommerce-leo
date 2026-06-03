@@ -15,13 +15,13 @@ function ProductCard({ product }) {
         whileHover={{ y: -10 }}
         transition={{ duration: 0.3 }}
         className={`
-          rounded-3xl
+          rounded-lg
           overflow-hidden
           p-5
           h-full
           flex flex-col
           transition-all duration-300
-          shadow-lg
+          shadow-sm hover:shadow-xl
 
           ${
             theme === "dark"
@@ -34,7 +34,7 @@ function ProductCard({ product }) {
         <div
           className={`
             h-64
-            rounded-2xl
+            rounded-lg
             p-4
             flex items-center justify-center
 
@@ -70,7 +70,7 @@ function ProductCard({ product }) {
 
           <h2
             className={`
-              text-lg
+              text-base
               font-semibold
               mt-2
               line-clamp-2
@@ -114,8 +114,8 @@ function ProductCard({ product }) {
                 addToCart(product);
               }}
               className="
-                w-12 h-12
-                rounded-full
+                w-11 h-11
+                rounded-lg
                 bg-violet-600
                 hover:bg-violet-700
                 text-white

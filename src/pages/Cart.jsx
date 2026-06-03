@@ -1,240 +1,132 @@
+import { Link } from "react-router-dom";
 import { FaTrash } from "react-icons/fa";
 
 import useCart from "../hooks/useCart";
+import useTheme from "../hooks/useTheme";
 
 function Cart() {
+  const { theme } = useTheme();
+  const { cartItems, removeFromCart } = useCart();
 
-  const {
-    cartItems,
-    removeFromCart,
-  } = useCart();
-
-  // Total
   const totalPrice = cartItems.reduce(
-
-    (total, item) =>
-
-      total + item.price * item.quantity,
-
+    (total, item) => total + item.price * item.quantity,
     0
   );
 
+  const surfaceClass =
+    theme === "dark"
+      ? "bg-slate-900 border-white/10 text-white"
+      : "bg-white border-black/5 text-slate-900";
+
   return (
-
-    <section
-      className="
-      w-full
-      px-6 md:px-10 xl:px-16
-      py-20
-      overflow-x-hidden
-      "
-    >
-
-      {/* Header */}
-      <div className="mb-14">
-
-        <h1 className="text-5xl font-bold mt-4">
+    <section className="w-full overflow-x-hidden px-6 py-20 md:px-10 xl:px-16">
+      <div className="mb-12">
+        <p className="font-semibold text-violet-600">Carrito</p>
+        <h1 className="mt-3 text-4xl font-bold md:text-5xl">
           Tus productos
         </h1>
-
       </div>
 
-      {/* Empty */}
       {cartItems.length === 0 ? (
+        <div className={`rounded-lg border p-12 text-center ${surfaceClass}`}>
+          <h2 className="text-3xl font-bold">Tu carrito esta vacio</h2>
 
-        <div
-          className="
-          bg-white rounded-3xl
-          border border-black/5
-          p-20 text-center
-          "
-        >
-
-          <h2 className="text-3xl font-bold">
-            Tu carrito está vacío
-          </h2>
-
-          <p className="text-gray-500 mt-4">
-            Agregá productos para continuar.
+          <p
+            className={`mt-4 ${
+              theme === "dark" ? "text-slate-300" : "text-slate-500"
+            }`}
+          >
+            Agrega productos para continuar.
           </p>
 
+          <Link
+            to="/products"
+            className="mt-8 inline-flex rounded-lg bg-violet-600 px-6 py-3 font-semibold text-white transition hover:bg-violet-700"
+          >
+            Ver productos
+          </Link>
         </div>
-
       ) : (
-
-        <div
-          className="
-          grid
-          grid-cols-1
-          xl:grid-cols-3
-          gap-10
-          "
-        >
-
-          {/* Products */}
-          <div className="xl:col-span-2 space-y-6">
-
+        <div className="grid grid-cols-1 gap-10 xl:grid-cols-3">
+          <div className="space-y-6 xl:col-span-2">
             {cartItems.map((item) => (
-
               <div
                 key={item.id}
-                className="
-                bg-white rounded-3xl
-                border border-black/5
-                p-6
-                flex flex-col md:flex-row
-                gap-6
-                overflow-hidden
-                "
+                className={`flex flex-col gap-6 overflow-hidden rounded-lg border p-6 md:flex-row ${surfaceClass}`}
               >
-
-                {/* Image */}
                 <div
-                  className="
-                  w-full md:w-32
-                  h-32
-                  bg-gray-100
-                  rounded-2xl
-                  flex items-center justify-center
-                  p-4 shrink-0
-                  "
+                  className={`flex h-32 w-full shrink-0 items-center justify-center rounded-lg p-4 md:w-32 ${
+                    theme === "dark" ? "bg-slate-800" : "bg-gray-100"
+                  }`}
                 >
-
                   <img
                     src={item.image}
                     alt={item.title}
                     className="h-full object-contain"
                   />
-
                 </div>
 
-                {/* Info */}
-                <div className="flex-1 min-w-0">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm text-violet-600">{item.category}</p>
 
-                  <p className="text-violet-600 text-sm">
-                    {item.category}
-                  </p>
-
-                  <h2
-                    className="
-                    text-xl font-semibold
-                    mt-2 break-words
-                    "
-                  >
+                  <h2 className="mt-2 break-words text-xl font-semibold">
                     {item.title}
                   </h2>
 
-                  <div
-                    className="
-                    flex items-center
-                    justify-between
-                    mt-6
-                    "
-                  >
-
+                  <div className="mt-6 flex items-center justify-between gap-4">
                     <div>
-
-                      <p className="text-gray-500">
+                      <p
+                        className={
+                          theme === "dark" ? "text-slate-300" : "text-gray-500"
+                        }
+                      >
                         Cantidad
                       </p>
-
-                      <span className="font-semibold">
-                        {item.quantity}
-                      </span>
-
+                      <span className="font-semibold">{item.quantity}</span>
                     </div>
 
                     <div className="text-right">
-
                       <p className="text-2xl font-bold">
-                        $
-                        {(
-                          item.price *
-                          item.quantity
-                        ).toFixed(2)}
+                        ${(item.price * item.quantity).toFixed(2)}
                       </p>
-
                     </div>
-
                   </div>
-
                 </div>
 
-                {/* Delete */}
                 <button
-                  onClick={() =>
-                    removeFromCart(item.id)
-                  }
-                  className="
-                  text-red-500
-                  hover:text-red-700
-                  transition
-                  shrink-0
-                  "
+                  onClick={() => removeFromCart(item.id)}
+                  className="shrink-0 text-red-500 transition hover:text-red-700"
                 >
-
                   <FaTrash />
-
                 </button>
-
               </div>
-
             ))}
-
           </div>
 
-          {/* Summary */}
-          <div
-            className="
-            bg-white rounded-3xl
-            border border-black/5
-            p-8
-            h-fit
-            "
-          >
+          <div className={`h-fit rounded-lg border p-8 ${surfaceClass}`}>
+            <h2 className="text-3xl font-bold">Resumen</h2>
 
-            <h2 className="text-3xl font-bold">
-              Resumen
-            </h2>
-
-            <div
-              className="
-              flex items-center
-              justify-between
-              mt-8
-              "
-            >
-
-              <span className="text-gray-500">
+            <div className="mt-8 flex items-center justify-between">
+              <span
+                className={theme === "dark" ? "text-slate-300" : "text-gray-500"}
+              >
                 Subtotal
               </span>
 
               <span className="text-2xl font-bold">
                 ${totalPrice.toFixed(2)}
               </span>
-
             </div>
 
-            <button
-              className="
-              w-full mt-10
-              bg-violet-600
-              hover:bg-violet-700
-              text-white
-              py-4 rounded-2xl
-              transition
-              font-semibold
-              "
+            <Link
+              to="/checkout"
+              className="mt-10 block w-full rounded-lg bg-violet-600 py-4 text-center font-semibold text-white transition hover:bg-violet-700"
             >
               Finalizar compra
-            </button>
-
+            </Link>
           </div>
-
         </div>
-
       )}
-
     </section>
   );
 }

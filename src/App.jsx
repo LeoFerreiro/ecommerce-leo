@@ -8,6 +8,7 @@ import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
+import Register from "./pages/Register";
 import { CartProvider } from "./context/CartContext";
 import useTheme from "./hooks/useTheme";
 
@@ -44,6 +45,7 @@ function App() {
           <Route path="/product/:id" element={<ProductDetails />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/registro" element={<Register />} />
         </Routes>
 
         <Footer />

@@ -8,11 +8,13 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { ThemeProvider } from "./context/ThemeContext";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     
     <ThemeProvider>
+    <AuthProvider>
     
     <App />
 
@@ -27,6 +29,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       theme="light"
     />
 
+    </AuthProvider>
     </ThemeProvider>
 
   </React.StrictMode>,

@@ -6,7 +6,7 @@ function Footer() {
   return (
     <footer
       className={`
-        py-8
+        mt-10 py-8
         text-center
         transition-colors
         duration-300
@@ -18,7 +18,7 @@ function Footer() {
         }
       `}
     >
-      © 2026 LeoStore — Todos los derechos reservados.
+      (c) 2026 LeoStore - Demo ecommerce.
     </footer>
   );
 }

@@ -8,9 +8,10 @@ function SearchBar({ search, setSearch }) {
     <div
       className={`
         flex items-center gap-4
-        rounded-2xl
+        rounded-lg
         px-5 py-4
         transition-colors duration-300
+        shadow-sm
 
         ${
           theme === "dark"

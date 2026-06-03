@@ -13,7 +13,7 @@ function CategoryFilter({
         onClick={() => setSelectedCategory("all")}
         className={`
           px-6 py-3
-          rounded-full
+          rounded-lg
           transition
 
           ${
@@ -25,7 +25,7 @@ function CategoryFilter({
           }
         `}
       >
-        All
+        Todos
       </button>
 
       {categories.map((category) => (
@@ -34,7 +34,7 @@ function CategoryFilter({
           onClick={() => setSelectedCategory(category)}
           className={`
             px-6 py-3
-            rounded-full
+            rounded-lg
             transition
             capitalize
 
