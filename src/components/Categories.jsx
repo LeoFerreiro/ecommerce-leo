@@ -26,7 +26,7 @@ const categories = [
 
 function Categories() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20">
+    <section className="mx-auto max-w-7xl px-8 py-20 md:px-10">
       <div className="mb-12">
         <p className="font-semibold text-violet-600">Categorias</p>
 

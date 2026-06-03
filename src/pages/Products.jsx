@@ -1,116 +1,57 @@
-import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import ProductsGrid from "../components/ProductsGrid";
-import LoadingSkeleton from "../components/LoadingSkeleton";
-import SearchBar from "../components/SearchBar";
-import CategoryFilter from "../components/CategoryFilter";
-
-import { getProducts } from "../services/api";
-
-
+import ProductFilters from "../components/products/ProductFilters";
+import ProductsEmptyState from "../components/products/ProductsEmptyState";
+import ProductsHeader from "../components/products/ProductsHeader";
+import ProductsLoadingGrid from "../components/products/ProductsLoadingGrid";
+import useProductFilters from "../hooks/useProductFilters";
+import useProducts from "../hooks/useProducts";
+import useTheme from "../hooks/useTheme";
 
 function Products() {
-
-  const [products, setProducts] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const [search, setSearch] = useState("");
-
-  const [selectedCategory, setSelectedCategory] =
-    useState("all");
-
-  useEffect(() => {
-
-    async function loadProducts() {
-
-      setLoading(true);
-
-      const data = await getProducts();
-
-      setProducts(data);
-
-      setLoading(false);
-    }
-
-    loadProducts();
-
-  }, []);
-
-  // Categories
-  const categories = [
-    ...new Set(
-      products.map((product) => product.category)
-    ),
-  ];
-
-  // Filtered Products
-  const filteredProducts = products.filter((product) => {
-
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesCategory =
-      selectedCategory === "all" ||
-      product.category === selectedCategory;
-
-    return matchesSearch && matchesCategory;
-  });
+  const { theme } = useTheme();
+  const [searchParams] = useSearchParams();
+  const { products, loading, error } = useProducts();
+  const {
+    filters,
+    categories,
+    filteredProducts,
+    updateFilter,
+    resetFilters,
+  } = useProductFilters(products, searchParams.get("search") || "");
 
   return (
-    <section className="w-full px-6 md:px-10 xl:px-16 py-20">
+    <section className="w-full px-8 py-20 md:px-10 xl:px-16">
+      <ProductsHeader />
 
-      {/* Header */}
-      <div className="mb-14">
-
-        <h1 className="text-5xl font-bold mt-4">
-          Nuestra colección
-        </h1>
-
-      </div>
-
-      {/* Search */}
-      <div className="mb-10">
-
-        <SearchBar
-          search={search}
-          setSearch={setSearch}
-        />
-
-      </div>
-
-      {/* Categories */}
-      <CategoryFilter
+      <ProductFilters
         categories={categories}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
+        filters={filters}
+        onFilterChange={updateFilter}
+        onResetFilters={resetFilters}
+        resultsCount={filteredProducts.length}
       />
 
-      {/* Products */}
-      {loading ? (
-
+      {error && (
         <div
-          className="grid
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-          xl:grid-cols-4
-          gap-8"
+          className={`mb-8 rounded-lg border p-4 ${
+            theme === "dark"
+              ? "border-red-500/30 bg-red-500/10 text-red-100"
+              : "border-red-200 bg-red-50 text-red-800"
+          }`}
         >
-
-          {[...Array(8)].map((_, index) => (
-            <LoadingSkeleton key={index} />
-          ))}
-
+          {error}
         </div>
-
-      ) : (
-
-        <ProductsGrid products={filteredProducts} />
-
       )}
 
+      {loading ? (
+        <ProductsLoadingGrid />
+      ) : filteredProducts.length > 0 ? (
+        <ProductsGrid products={filteredProducts} />
+      ) : (
+        <ProductsEmptyState onResetFilters={resetFilters} />
+      )}
     </section>
   );
 }

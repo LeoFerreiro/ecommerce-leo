@@ -1,34 +1,39 @@
-import HeroSlider from "../components/HeroSlider";
-import FeaturedProducts from "../components/FeaturedProducts";
-import Categories from "../components/Categories";
-import SearchBar from "../components/SearchBar";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Categories from "../components/Categories";
+import FeaturedProducts from "../components/FeaturedProducts";
+import HeroSlider from "../components/HeroSlider";
+import SearchBar from "../components/SearchBar";
 
 function Home() {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
+
+  function handleSearchSubmit(e) {
+    e.preventDefault();
+
+    if (search.trim()) {
+      navigate(`/products?search=${encodeURIComponent(search.trim())}`);
+      return;
+    }
+
+    navigate("/products");
+  }
 
   return (
-
     <main className="pt-10">
-
-    <div>
       <HeroSlider />
 
-       {/* Search */}
-      <div className="max-w-3xl mx-auto px-6 relative z-20">
-
-        <SearchBar
-          search={search}
-          setSearch={setSearch}
-        />
-
-      </div>
+      <form
+        onSubmit={handleSearchSubmit}
+        className="relative z-20 mx-auto mt-[-32px] max-w-3xl px-8 md:px-10"
+      >
+        <SearchBar search={search} setSearch={setSearch} />
+      </form>
 
       <FeaturedProducts />
-
       <Categories />
-    </div>
-
     </main>
   );
 }

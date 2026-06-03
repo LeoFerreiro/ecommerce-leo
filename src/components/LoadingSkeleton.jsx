@@ -1,7 +1,7 @@
 function LoadingSkeleton() {
   return (
     <div
-      className="bg-white rounded-3xl
+      className="bg-white rounded-lg
       border border-black/5 p-5
       animate-pulse"
     >
@@ -9,7 +9,7 @@ function LoadingSkeleton() {
       {/* Image */}
       <div
         className="bg-gray-200
-        h-[250px] rounded-2xl"
+        h-[250px] rounded-lg"
       />
 
       {/* Text */}
@@ -43,7 +43,7 @@ function LoadingSkeleton() {
 
           <div
             className="w-12 h-12
-            rounded-full bg-gray-200"
+            rounded-lg bg-gray-200"
           />
 
         </div>

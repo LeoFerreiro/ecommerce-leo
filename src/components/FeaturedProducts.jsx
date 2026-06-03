@@ -5,7 +5,7 @@ import ProductCard from "./ProductCard";
 
 function FeaturedProducts() {
   return (
-    <section className="mx-auto max-w-7xl px-6 py-20">
+    <section className="mx-auto max-w-7xl px-8 py-20 md:px-10">
       <div className="mb-12 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-semibold text-violet-600">Destacados</p>

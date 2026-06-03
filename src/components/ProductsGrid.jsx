@@ -9,7 +9,8 @@ function ProductsGrid({ products }) {
       sm:grid-cols-2
       lg:grid-cols-3
       2xl:grid-cols-4
-      gap-8"
+      gap-8
+      px-0"
     >
       {products.map((product) => (
         <ProductCard
