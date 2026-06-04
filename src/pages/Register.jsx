@@ -54,8 +54,8 @@ function Register() {
 
   if (user) {
     return (
-      <section className="section-shell py-20">
-        <div className="grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-center">
+      <section className="section-shell py-24">
+        <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
           <div>
             <p className="font-semibold text-[#1f7a3a]">Cuenta demo activa</p>
             <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
@@ -94,8 +94,8 @@ function Register() {
   }
 
   return (
-    <section className="section-shell py-20">
-      <div className="grid gap-10 lg:grid-cols-[0.9fr_1fr] lg:items-center">
+    <section className="section-shell py-24">
+      <div className="grid gap-14 lg:grid-cols-[0.9fr_1fr] lg:items-center">
         <div>
           <p className="font-semibold text-[#1f7a3a]">Registro demo</p>
           <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">

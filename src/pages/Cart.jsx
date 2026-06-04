@@ -12,8 +12,8 @@ function Cart() {
   );
 
   return (
-    <section className="section-shell py-20">
-      <div className="mb-12">
+    <section className="section-shell py-24">
+      <div className="mb-14">
         <p className="font-semibold text-[#1f7a3a]">Carrito</p>
         <h1 className="mt-3 text-4xl font-extrabold md:text-5xl">
           Tus productos
@@ -33,8 +33,8 @@ function Cart() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-10 xl:grid-cols-3">
-          <div className="space-y-6 xl:col-span-2">
+        <div className="grid grid-cols-1 gap-12 xl:grid-cols-3">
+          <div className="space-y-8 xl:col-span-2">
             {cartItems.map((item) => (
               <div
                 key={item.id}

@@ -35,8 +35,8 @@ function ProductCard({ product }) {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col p-5">
-          <div className="mb-3 flex items-center justify-between gap-3 text-xs font-bold uppercase text-[#1f7a3a]">
+        <div className="flex flex-1 flex-col p-6">
+          <div className="mb-4 flex items-center justify-between gap-3 text-xs font-bold uppercase text-[#1f7a3a]">
             <span>{product.brand}</span>
             <span>{product.sport}</span>
           </div>
@@ -45,12 +45,12 @@ function ProductCard({ product }) {
             {product.audience} / {product.group} / {product.type}
           </p>
 
-          <h2 className="mt-2 line-clamp-2 text-base font-bold text-[#111813]">
+          <h2 className="mt-3 line-clamp-2 text-base font-bold text-[#111813]">
             {product.title}
           </h2>
 
           <div className="mt-auto flex items-end justify-between gap-4 pt-6">
-            <div>
+            <div className="space-y-1">
               {product.originalPrice && (
                 <p className="text-sm font-semibold text-[#8c978f] line-through">
                   ${product.originalPrice}

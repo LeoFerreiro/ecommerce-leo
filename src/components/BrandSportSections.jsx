@@ -4,8 +4,8 @@ import { brandShortcuts, sportShortcuts } from "../config/homeSections";
 
 function BrandSportSections() {
   return (
-    <section className="bg-[#102116] py-20 text-white">
-      <div className="section-shell grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    <section className="bg-[#102116] py-24 text-white">
+      <div className="section-shell grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <p className="font-semibold text-[#88d68f]">Marcas y deportes</p>
           <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">
@@ -13,7 +13,7 @@ function BrandSportSections() {
           </h2>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2">
+        <div className="grid gap-7 md:grid-cols-2">
           <div className="rounded-lg border border-white/10 bg-white/5 p-5">
             <h3 className="mb-4 text-xl font-bold">Marcas</h3>
             <div className="grid gap-3">

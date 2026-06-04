@@ -28,8 +28,8 @@ function ProductDetails() {
   }
 
   return (
-    <section className="section-shell py-20">
-      <div className="grid gap-14 lg:grid-cols-2 lg:items-center">
+    <section className="section-shell py-24">
+      <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
         <motion.div
           initial={{ opacity: 0, x: -60 }}
           animate={{ opacity: 1, x: 0 }}

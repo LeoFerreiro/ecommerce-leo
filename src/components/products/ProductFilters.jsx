@@ -10,8 +10,8 @@ function ProductFilters({
   resultsCount,
 }) {
   return (
-    <div className="mb-10 rounded-lg border border-[#d7e3d2] bg-white p-4 shadow-sm md:p-5">
-      <div className="mb-5 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+    <div className="mb-12 rounded-lg border border-[#d7e3d2] bg-white p-5 shadow-sm md:p-7">
+      <div className="mb-7 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#102116] text-white">
             <FaFilter />
@@ -33,7 +33,7 @@ function ProductFilters({
         </button>
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+      <div className="grid gap-5 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <SearchBar
           search={filters.search}
           setSearch={(value) => onFilterChange("search", value)}
@@ -64,7 +64,7 @@ function ProductFilters({
         />
       </div>
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-5 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
         <FilterSelect
           label="Marca"
           value={filters.brand}
@@ -103,7 +103,7 @@ function ProductFilters({
         </select>
       </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:max-w-xl">
+      <div className="mt-5 grid gap-5 sm:grid-cols-2 lg:max-w-xl">
         <input
           type="number"
           min="0"

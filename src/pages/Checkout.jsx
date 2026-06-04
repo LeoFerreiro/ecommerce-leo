@@ -46,7 +46,7 @@ function Checkout() {
 
   if (cartItems.length === 0) {
     return (
-      <section className="section-shell py-20">
+      <section className="section-shell py-24">
         <div className="mx-auto max-w-3xl rounded-lg border border-[#d7e3d2] bg-white p-12 text-center">
           <h1 className="text-3xl font-extrabold">No hay productos para comprar</h1>
           <p className="mt-4 text-[#667369]">
@@ -64,7 +64,7 @@ function Checkout() {
   }
 
   return (
-    <section className="section-shell min-h-screen py-20">
+    <section className="section-shell min-h-screen py-24">
       <p className="font-semibold text-[#1f7a3a]">Checkout</p>
       <h1 className="mb-10 mt-3 text-4xl font-extrabold md:text-5xl">
         Finalizar compra
@@ -80,7 +80,7 @@ function Checkout() {
         </div>
       )}
 
-      <div className="grid gap-10 lg:grid-cols-2">
+      <div className="grid gap-12 lg:grid-cols-2">
         <form
           onSubmit={handleSubmit}
           className="space-y-6 rounded-lg border border-[#d7e3d2] bg-white p-8 shadow-lg"

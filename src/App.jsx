@@ -19,7 +19,7 @@ function App() {
           <Navbar />
           <CartDrawer />
 
-          <div className="h-24" />
+          <div className="h-28" />
 
           <Routes>
             <Route path="/" element={<Home />} />

@@ -4,15 +4,15 @@ import { audienceSections, categoryShortcuts } from "../config/homeSections";
 
 function Categories() {
   return (
-    <section className="section-shell py-20">
-      <div className="mb-10">
+    <section className="section-shell py-24">
+      <div className="mb-12">
         <p className="font-semibold text-[#1f7a3a]">Secciones</p>
         <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">
           Compra por estilo, deporte o categoria
         </h2>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-8 lg:grid-cols-3">
         {audienceSections.map((section) => (
           <Link
             key={section.title}
@@ -33,7 +33,7 @@ function Categories() {
         ))}
       </div>
 
-      <div className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
         {categoryShortcuts.map((link) => (
           <Link
             key={link.label}

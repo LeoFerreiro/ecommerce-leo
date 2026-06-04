@@ -28,7 +28,7 @@ function Home() {
 
       <form
         onSubmit={handleSearchSubmit}
-        className="section-shell relative z-20 mt-[-32px] max-w-3xl"
+        className="section-shell relative z-20 mt-10 max-w-3xl"
       >
         <SearchBar search={search} setSearch={setSearch} />
       </form>

@@ -7,8 +7,8 @@ function FeaturedProducts() {
   const featuredProducts = products.filter((product) => product.isLaunch).slice(0, 4);
 
   return (
-    <section className="section-shell py-20">
-      <div className="mb-10 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+    <section className="section-shell py-24">
+      <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="font-semibold text-[#1f7a3a]">Lanzamientos</p>
 
@@ -25,7 +25,7 @@ function FeaturedProducts() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
         {featuredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}
