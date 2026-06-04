@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import useAuth from "../hooks/useAuth";
+import { isValidEmail, isValidPassword } from "../utils/validation";
 
 const initialForm = {
   name: "",
@@ -37,8 +38,13 @@ function Register() {
       return;
     }
 
-    if (formData.password.length < 6) {
-      toast.error("La contrasena debe tener al menos 6 caracteres");
+    if (!isValidEmail(formData.email)) {
+      toast.error("Ingresa un email valido de un dominio conocido");
+      return;
+    }
+
+    if (!isValidPassword(formData.password)) {
+      toast.error("La contrasena debe tener 8 a 15 caracteres y 3 tipos distintos");
       return;
     }
 
@@ -54,11 +60,11 @@ function Register() {
 
   if (user) {
     return (
-      <section className="section-shell py-24">
+      <section className="section-shell section-stack">
         <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
           <div>
-            <p className="font-semibold text-[#1f7a3a]">Cuenta demo activa</p>
-            <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
+            <p className="mb-5 font-semibold text-[#1f7a3a]">Cuenta demo activa</p>
+            <h1 className="text-4xl font-extrabold leading-[1.15] md:text-5xl">
               Hola, {user.name}. Tu sesion esta lista para probar la tienda.
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-8 text-[#667369]">
@@ -94,16 +100,21 @@ function Register() {
   }
 
   return (
-    <section className="section-shell py-24">
+    <section className="section-shell section-stack">
       <div className="grid gap-14 lg:grid-cols-[0.9fr_1fr] lg:items-center">
         <div>
-          <p className="font-semibold text-[#1f7a3a]">Registro demo</p>
-          <h1 className="mt-4 text-4xl font-extrabold leading-tight md:text-5xl">
+          <p className="mb-5 font-semibold text-[#1f7a3a]">Registro demo</p>
+          <h1 className="text-4xl font-extrabold leading-[1.15] md:text-5xl">
             Crea una cuenta para guardar tu experiencia durante la demo.
           </h1>
           <p className="mt-5 text-lg leading-8 text-[#667369]">
             Los datos no se guardan en localStorage ni en una base de datos.
             Solo quedan activos mientras la pagina permanece abierta.
+          </p>
+          <p className="mt-4 text-sm leading-6 text-[#667369]">
+            Para esta demo validamos emails con formato correcto y dominios
+            comunes como gmail.com, outlook.com, hotmail.com, yahoo.com e
+            icloud.com.
           </p>
         </div>
 
@@ -141,7 +152,7 @@ function Register() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Minimo 6 caracteres"
+                  placeholder="8 a 15 caracteres"
                   className="w-full bg-transparent py-4 outline-none"
                 />
               </FormField>
@@ -158,6 +169,11 @@ function Register() {
               </FormField>
             </div>
           </div>
+
+          <p className="mt-5 text-sm leading-6 text-[#667369]">
+            La contrasena debe combinar al menos 3 tipos: minusculas,
+            mayusculas, numeros o simbolos.
+          </p>
 
           <button
             type="submit"

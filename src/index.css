@@ -38,8 +38,16 @@ textarea {
   margin-inline: auto;
 }
 
+.section-stack {
+  padding-block: 7rem;
+}
+
 @media (max-width: 640px) {
   .section-shell {
     width: min(100% - 40px, 1280px);
+  }
+
+  .section-stack {
+    padding-block: 5rem;
   }
 }

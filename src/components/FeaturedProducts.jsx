@@ -7,12 +7,12 @@ function FeaturedProducts() {
   const featuredProducts = products.filter((product) => product.isLaunch).slice(0, 4);
 
   return (
-    <section className="section-shell py-24">
-      <div className="mb-12 flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+    <section className="section-shell section-stack">
+      <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="font-semibold text-[#1f7a3a]">Lanzamientos</p>
+          <p className="mb-5 font-semibold text-[#1f7a3a]">Lanzamientos</p>
 
-          <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">
+          <h2 className="max-w-3xl text-3xl font-extrabold leading-[1.15] md:text-5xl">
             Lo nuevo para entrenar y salir
           </h2>
         </div>

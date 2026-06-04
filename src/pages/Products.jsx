@@ -31,7 +31,7 @@ function ProductsCatalog({ initialFilters }) {
   } = useProductFilters(products, initialFilters);
 
   return (
-    <section className="section-shell py-24">
+    <section className="section-shell section-stack">
       <ProductsHeader />
 
       <ProductFilters

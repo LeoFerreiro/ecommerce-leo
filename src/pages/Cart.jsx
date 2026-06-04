@@ -1,21 +1,22 @@
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+import SafeImage from "../components/common/SafeImage";
+import ShippingProgress from "../components/shipping/ShippingProgress";
+import { getShippingCost } from "../constants/shipping";
 import useCart from "../hooks/useCart";
+import { formatPrice } from "../utils/currency";
 
 function Cart() {
-  const { cartItems, removeFromCart } = useCart();
-
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const { cartItems, removeFromCart, subtotal, getCartItemKey } = useCart();
+  const shippingCost = getShippingCost(subtotal);
+  const total = subtotal + shippingCost;
 
   return (
-    <section className="section-shell py-24">
-      <div className="mb-14">
-        <p className="font-semibold text-[#1f7a3a]">Carrito</p>
-        <h1 className="mt-3 text-4xl font-extrabold md:text-5xl">
+    <section className="section-shell section-stack">
+      <div className="mb-16">
+        <p className="mb-5 font-semibold text-[#1f7a3a]">Carrito</p>
+        <h1 className="text-4xl font-extrabold leading-[1.15] md:text-5xl">
           Tus productos
         </h1>
       </div>
@@ -37,11 +38,11 @@ function Cart() {
           <div className="space-y-8 xl:col-span-2">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={getCartItemKey(item)}
                 className="flex flex-col gap-6 overflow-hidden rounded-lg border border-[#d7e3d2] bg-white p-6 md:flex-row"
               >
                 <div className="h-32 w-full shrink-0 overflow-hidden rounded-lg bg-[#e8f3e5] md:w-32">
-                  <img
+                  <SafeImage
                     src={item.image}
                     alt={item.title}
                     className="h-full w-full object-cover"
@@ -57,20 +58,31 @@ function Cart() {
                     {item.title}
                   </h2>
 
+                  {item.selectedSize && (
+                    <p className="mt-2 text-sm font-bold text-[#102116]">
+                      Talle: {item.selectedSize}
+                    </p>
+                  )}
+
                   <div className="mt-6 flex items-center justify-between gap-4">
                     <div>
                       <p className="text-[#667369]">Cantidad</p>
                       <span className="font-bold">{item.quantity}</span>
+                      <p className="mt-1 text-sm text-[#667369]">
+                        {item.selectedSize
+                          ? `Stock en talle: ${item.stock}`
+                          : `Stock disponible: ${item.stock}`}
+                      </p>
                     </div>
 
                     <p className="text-2xl font-extrabold">
-                      ${(item.price * item.quantity).toFixed(2)}
+                      {formatPrice(item.price * item.quantity)}
                     </p>
                   </div>
                 </div>
 
                 <button
-                  onClick={() => removeFromCart(item.id)}
+                  onClick={() => removeFromCart(getCartItemKey(item))}
                   className="shrink-0 text-red-500 transition hover:text-red-700"
                 >
                   <FaTrash />
@@ -82,10 +94,28 @@ function Cart() {
           <div className="h-fit rounded-lg border border-[#d7e3d2] bg-white p-8">
             <h2 className="text-3xl font-extrabold">Resumen</h2>
 
+            <div className="mt-8">
+              <ShippingProgress subtotal={subtotal} />
+            </div>
+
             <div className="mt-8 flex items-center justify-between">
               <span className="text-[#667369]">Subtotal</span>
               <span className="text-2xl font-extrabold">
-                ${totalPrice.toFixed(2)}
+                {formatPrice(subtotal)}
+              </span>
+            </div>
+
+            <div className="mt-4 flex items-center justify-between">
+              <span className="text-[#667369]">Envio estandar</span>
+              <span className="text-xl font-extrabold">
+                {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
+              </span>
+            </div>
+
+            <div className="mt-6 flex items-center justify-between border-t border-[#d7e3d2] pt-6">
+              <span className="text-xl font-bold">Total estimado</span>
+              <span className="text-3xl font-extrabold text-[#1f7a3a]">
+                {formatPrice(total)}
               </span>
             </div>
 

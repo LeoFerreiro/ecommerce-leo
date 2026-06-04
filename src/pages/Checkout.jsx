@@ -2,13 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+import ShippingProgress from "../components/shipping/ShippingProgress";
+import ShippingSelector from "../components/shipping/ShippingSelector";
+import { getShippingCost } from "../constants/shipping";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
+import { formatPrice } from "../utils/currency";
 
 function Checkout() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { cartItems, clearCart } = useCart();
+  const { cartItems, clearCart, subtotal, getCartItemKey } = useCart();
+  const [selectedShippingId, setSelectedShippingId] = useState("standard");
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -16,10 +21,8 @@ function Checkout() {
     address: "",
   });
 
-  const total = cartItems.reduce(
-    (acc, item) => acc + item.price * item.quantity,
-    0
-  );
+  const shippingCost = getShippingCost(subtotal, selectedShippingId);
+  const total = subtotal + shippingCost;
 
   function handleChange(e) {
     setFormData({
@@ -36,7 +39,7 @@ function Checkout() {
       return;
     }
 
-    toast.success("Compra realizada con exito");
+    toast.success("Compra demo simulada con exito");
     clearCart();
 
     setTimeout(() => {
@@ -65,8 +68,8 @@ function Checkout() {
 
   return (
     <section className="section-shell min-h-screen py-24">
-      <p className="font-semibold text-[#1f7a3a]">Checkout</p>
-      <h1 className="mb-10 mt-3 text-4xl font-extrabold md:text-5xl">
+      <p className="mb-5 font-semibold text-[#1f7a3a]">Checkout</p>
+      <h1 className="mb-14 text-4xl font-extrabold leading-[1.15] md:text-5xl">
         Finalizar compra
       </h1>
 
@@ -86,6 +89,10 @@ function Checkout() {
           className="space-y-6 rounded-lg border border-[#d7e3d2] bg-white p-8 shadow-lg"
         >
           <h2 className="text-2xl font-bold">Datos de envio</h2>
+          <p className="rounded-lg border border-[#b9d9b7] bg-[#e8f3e5] p-4 text-sm font-semibold text-[#102116]">
+            Esta pantalla simula el checkout. No ingreses datos reales de pago:
+            no se procesan compras ni se envian pedidos.
+          </p>
 
           <input
             type="text"
@@ -114,11 +121,21 @@ function Checkout() {
             className="w-full rounded-lg border border-[#d7e3d2] p-4 outline-none transition focus:border-[#1f7a3a]"
           />
 
+          <div className="space-y-4 pt-2">
+            <h3 className="text-xl font-bold">Metodo de envio</h3>
+            <ShippingProgress subtotal={subtotal} />
+            <ShippingSelector
+              selectedShippingId={selectedShippingId}
+              subtotal={subtotal}
+              onChange={setSelectedShippingId}
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full rounded-lg bg-[#102116] py-4 font-bold text-white transition hover:bg-[#1f7a3a]"
           >
-            Confirmar compra
+            Simular compra
           </button>
         </form>
 
@@ -128,25 +145,46 @@ function Checkout() {
           <div className="space-y-4">
             {cartItems.map((item) => (
               <div
-                key={item.id}
+                key={getCartItemKey(item)}
                 className="flex justify-between gap-4 border-b border-[#d7e3d2] pb-3"
               >
                 <div>
                   <p className="font-bold">{item.title}</p>
+                  {item.selectedSize && (
+                    <p className="text-sm font-bold text-[#102116]">
+                      Talle: {item.selectedSize}
+                    </p>
+                  )}
                   <p className="text-sm text-[#667369]">Cantidad: {item.quantity}</p>
                 </div>
 
                 <span className="font-bold">
-                  ${(item.price * item.quantity).toFixed(2)}
+                  {formatPrice(item.price * item.quantity)}
                 </span>
               </div>
             ))}
           </div>
 
-          <div className="mt-8 flex items-center justify-between border-t border-[#d7e3d2] pt-6">
+          <div className="mt-8 space-y-4 border-t border-[#d7e3d2] pt-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[#667369]">Subtotal</span>
+              <span className="text-xl font-extrabold">
+                {formatPrice(subtotal)}
+              </span>
+            </div>
+
+            <div className="flex items-center justify-between">
+              <span className="text-[#667369]">Envio</span>
+              <span className="text-xl font-extrabold">
+                {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
+              </span>
+            </div>
+          </div>
+
+          <div className="mt-6 flex items-center justify-between border-t border-[#d7e3d2] pt-6">
             <span className="text-xl">Total</span>
             <span className="text-3xl font-extrabold text-[#1f7a3a]">
-              ${total.toFixed(2)}
+              {formatPrice(total)}
             </span>
           </div>
         </div>

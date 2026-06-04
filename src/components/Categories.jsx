@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
 
 import { audienceSections, categoryShortcuts } from "../config/homeSections";
+import SafeImage from "./common/SafeImage";
 
 function Categories() {
   return (
-    <section className="section-shell py-24">
-      <div className="mb-12">
-        <p className="font-semibold text-[#1f7a3a]">Secciones</p>
-        <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">
+    <section className="section-shell section-stack">
+      <div className="mb-16 max-w-4xl">
+        <p className="mb-5 font-semibold text-[#1f7a3a]">Secciones</p>
+        <h2 className="text-3xl font-extrabold leading-[1.15] md:text-5xl">
           Compra por estilo, deporte o categoria
         </h2>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-3">
+      <div className="grid gap-10 lg:grid-cols-3">
         {audienceSections.map((section) => (
           <Link
             key={section.title}
             to={section.to}
             className="group relative min-h-[360px] overflow-hidden rounded-lg bg-[#102116]"
           >
-            <img
+            <SafeImage
               src={section.image}
               alt={section.title}
               className="absolute inset-0 h-full w-full object-cover opacity-75 transition duration-700 group-hover:scale-105"
@@ -33,7 +34,7 @@ function Categories() {
         ))}
       </div>
 
-      <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
         {categoryShortcuts.map((link) => (
           <Link
             key={link.label}

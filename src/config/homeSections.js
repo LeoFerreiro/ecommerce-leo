@@ -4,7 +4,7 @@ export const audienceSections = [
     text: "Indumentaria, calzado y accesorios",
     to: "/products?audience=hombre",
     image:
-      "https://images.unsplash.com/photo-1506629905607-d9f297d092a7?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=900&q=80",
   },
   {
     title: "Mujer",

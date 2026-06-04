@@ -1,6 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import CartDrawer from "./components/CartDrawer";
+import DemoNotice from "./components/DemoNotice";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { CartProvider } from "./context/CartContext";
@@ -20,6 +21,7 @@ function App() {
           <CartDrawer />
 
           <div className="h-28" />
+          <DemoNotice />
 
           <Routes>
             <Route path="/" element={<Home />} />

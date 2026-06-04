@@ -3,7 +3,11 @@ import { FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
 
+import SafeImage from "./common/SafeImage";
+import ShippingProgress from "./shipping/ShippingProgress";
+import { getShippingCost } from "../constants/shipping";
 import useCart from "../hooks/useCart";
+import { formatPrice } from "../utils/currency";
 
 function CartDrawer() {
   const {
@@ -13,12 +17,11 @@ function CartDrawer() {
     removeFromCart,
     increaseQuantity,
     decreaseQuantity,
+    subtotal,
+    getCartItemKey,
   } = useCart();
-
-  const totalPrice = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
-    0
-  );
+  const shippingCost = getShippingCost(subtotal);
+  const total = subtotal + shippingCost;
 
   useEffect(() => {
     document.body.style.overflow = isCartOpen ? "hidden" : "auto";
@@ -67,11 +70,11 @@ function CartDrawer() {
                 <div className="min-h-0 flex-1 space-y-4 overflow-y-auto py-5">
                   {cartItems.map((item) => (
                     <div
-                      key={item.id}
+                      key={getCartItemKey(item)}
                       className="flex gap-4 rounded-lg border border-[#d7e3d2] p-4"
                     >
                       <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-[#e8f3e5]">
-                        <img
+                        <SafeImage
                           src={item.image}
                           alt={item.title}
                           className="h-full w-full object-cover"
@@ -81,19 +84,29 @@ function CartDrawer() {
                       <div className="min-w-0 flex-1">
                         <h3 className="line-clamp-2 font-bold">{item.title}</h3>
                         <p className="mt-1 text-sm font-semibold text-[#1f7a3a]">
-                          ${item.price}
+                          {formatPrice(item.price)}
+                        </p>
+                        {item.selectedSize && (
+                          <p className="mt-1 text-xs font-bold text-[#102116]">
+                            Talle: {item.selectedSize}
+                          </p>
+                        )}
+                        <p className="mt-1 text-xs text-[#667369]">
+                          {item.selectedSize
+                            ? `Stock talle: ${item.stock}`
+                            : `Stock: ${item.stock}`}
                         </p>
 
                         <div className="mt-3 flex items-center gap-3">
                           <button
-                            onClick={() => decreaseQuantity(item.id)}
+                            onClick={() => decreaseQuantity(getCartItemKey(item))}
                             className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
                           >
                             -
                           </button>
                           <span className="font-bold">{item.quantity}</span>
                           <button
-                            onClick={() => increaseQuantity(item.id)}
+                            onClick={() => increaseQuantity(getCartItemKey(item))}
                             className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
                           >
                             +
@@ -102,7 +115,7 @@ function CartDrawer() {
                       </div>
 
                       <button
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(getCartItemKey(item))}
                         className="text-red-500 transition hover:text-red-700"
                       >
                         <FaTrash />
@@ -112,10 +125,26 @@ function CartDrawer() {
                 </div>
 
                 <div className="border-t border-[#d7e3d2] pt-6">
-                  <div className="mb-6 flex items-center justify-between">
+                  <ShippingProgress subtotal={subtotal} />
+
+                  <div className="mt-5 flex items-center justify-between">
+                    <span className="text-[#667369]">Subtotal</span>
+                    <span className="text-xl font-extrabold">
+                      {formatPrice(subtotal)}
+                    </span>
+                  </div>
+
+                  <div className="mt-3 flex items-center justify-between">
+                    <span className="text-[#667369]">Envio</span>
+                    <span className="font-bold">
+                      {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
+                    </span>
+                  </div>
+
+                  <div className="mb-6 mt-5 flex items-center justify-between border-t border-[#d7e3d2] pt-5">
                     <span className="text-[#667369]">Total</span>
                     <span className="text-3xl font-extrabold">
-                      ${totalPrice.toFixed(2)}
+                      {formatPrice(total)}
                     </span>
                   </div>
 

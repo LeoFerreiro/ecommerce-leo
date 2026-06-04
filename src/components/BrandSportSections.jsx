@@ -4,11 +4,11 @@ import { brandShortcuts, sportShortcuts } from "../config/homeSections";
 
 function BrandSportSections() {
   return (
-    <section className="bg-[#102116] py-24 text-white">
+    <section className="bg-[#102116] py-28 text-white">
       <div className="section-shell grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
-          <p className="font-semibold text-[#88d68f]">Marcas y deportes</p>
-          <h2 className="mt-3 text-3xl font-extrabold md:text-5xl">
+          <p className="mb-5 font-semibold text-[#88d68f]">Marcas y deportes</p>
+          <h2 className="text-3xl font-extrabold leading-[1.15] md:text-5xl">
             Elegi por marca favorita o por la forma en que entrenas.
           </h2>
         </div>

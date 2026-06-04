@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 
+import SafeImage from "./common/SafeImage";
+
 function HeroSlider() {
   return (
     <section className="section-shell pt-10">
       <div className="relative min-h-[560px] overflow-hidden rounded-lg bg-[#102116]">
-        <img
+        <SafeImage
           src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1800&q=80"
           alt="Indumentaria deportiva premium"
           className="absolute inset-0 h-full w-full object-cover opacity-70"
