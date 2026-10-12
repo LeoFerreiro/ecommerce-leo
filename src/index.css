@@ -2,52 +2,106 @@
 
 @import "tailwindcss";
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+@theme static {
+  --font-sans: 'Poppins', sans-serif;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f4f6f5;
+  --color-ink: #151a17;
+  --color-ink-muted: #59635d;
+  --color-brand: #176b3a;
+  --color-brand-accent: #63c878;
+  --color-line: #dee5e0;
 }
 
-html,
-body,
-#root {
-  width: 100%;
-  overflow-x: hidden;
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+  }
+
+  body {
+    min-width: 0;
+    background: var(--color-surface);
+    color: var(--color-ink);
+    line-height: 1.5;
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font-family: inherit;
+  }
+
+  input,
+  select,
+  textarea {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  button:not(:disabled),
+  select {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background: var(--color-brand-accent);
+    color: var(--color-ink);
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #f5f7f2;
-  color: #111813;
-}
-
-button,
-a,
-input,
-select,
-textarea {
-  font: inherit;
-}
-
-.section-shell {
-  width: min(100% - 96px, 1240px);
-  margin-inline: auto;
-}
-
-.section-stack {
-  padding-block: 7rem;
-}
-
-@media (max-width: 640px) {
+@layer components {
   .section-shell {
-    width: min(100% - 40px, 1280px);
+    width: min(100% - 96px, 1240px);
+    margin-inline: auto;
   }
 
   .section-stack {
-    padding-block: 5rem;
+    padding-block: 7rem;
+  }
+
+  @media (max-width: 640px) {
+    .section-shell {
+      width: min(100% - 40px, 1240px);
+    }
+
+    .section-stack {
+      padding-block: 5rem;
+    }
+  }
+}
+
+/* Keep keyboard focus visible even on controls using outline-none. */
+:where(a, button, input, select, textarea):focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Framer Motion writes transforms and opacity inline. */
+  [style*="transform"] {
+    transform: none !important;
+  }
+
+  [style*="opacity"] {
+    opacity: 1 !important;
   }
 }
