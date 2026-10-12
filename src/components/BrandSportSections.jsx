@@ -4,7 +4,7 @@ import { brandShortcuts, sportShortcuts } from "../config/homeSections";
 
 function BrandSportSections() {
   return (
-    <section className="bg-[#102116] py-28 text-white">
+    <section className="home-brands bg-[#102116] text-white">
       <div className="section-shell grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
         <div>
           <p className="mb-5 font-semibold text-[#88d68f]">Marcas y deportes</p>

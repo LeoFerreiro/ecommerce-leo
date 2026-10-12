@@ -20,7 +20,7 @@ function App() {
           <Navbar />
           <CartDrawer />
 
-          <div className="h-28" />
+          <div className="h-28 lg:h-20" />
           <DemoNotice />
 
           <Routes>

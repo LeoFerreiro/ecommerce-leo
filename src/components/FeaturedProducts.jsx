@@ -7,7 +7,7 @@ function FeaturedProducts() {
   const featuredProducts = products.filter((product) => product.isLaunch).slice(0, 4);
 
   return (
-    <section className="section-shell section-stack">
+    <section className="home-featured home-section section-shell">
       <div className="mb-16 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <p className="mb-5 font-semibold text-[#1f7a3a]">Lanzamientos</p>
@@ -25,7 +25,7 @@ function FeaturedProducts() {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {featuredProducts.map((product) => (
           <ProductCard key={product.id} product={product} />
         ))}

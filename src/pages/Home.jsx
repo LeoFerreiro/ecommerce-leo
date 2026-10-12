@@ -23,12 +23,12 @@ function Home() {
   }
 
   return (
-    <main>
+    <main className="home-page">
       <HeroSlider />
 
       <form
         onSubmit={handleSearchSubmit}
-        className="section-shell relative z-20 mt-10 max-w-3xl"
+        className="home-search section-shell relative z-20"
       >
         <SearchBar search={search} setSearch={setSearch} />
       </form>

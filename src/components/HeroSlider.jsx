@@ -4,22 +4,22 @@ import SafeImage from "./common/SafeImage";
 
 function HeroSlider() {
   return (
-    <section className="section-shell pt-10">
-      <div className="relative min-h-[560px] overflow-hidden rounded-lg bg-[#102116]">
+    <section className="home-hero">
+      <div className="hero-scene relative overflow-hidden bg-[#102116]">
         <SafeImage
           src="https://images.unsplash.com/photo-1521412644187-c49fa049e84d?auto=format&fit=crop&w=1800&q=80"
           alt="Indumentaria deportiva premium"
-          className="absolute inset-0 h-full w-full object-cover opacity-70"
+          className="hero-photo absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-gradient-to-r from-[#08120c] via-[#08120c]/70 to-transparent" />
+        <div className="hero-shade absolute inset-0" />
 
-        <div className="relative z-10 flex min-h-[560px] max-w-2xl flex-col justify-center px-6 py-16 text-white md:px-12">
+        <div className="hero-copy section-shell relative z-10 text-white">
           <p className="mb-5 font-semibold text-[#88d68f]">
             Nueva temporada deportiva
           </p>
 
-          <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">
+          <h1 className="hero-title">
             Indumentaria, calzado y accesorios para moverte mejor.
           </h1>
 

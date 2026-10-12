@@ -5,7 +5,7 @@ import SafeImage from "./common/SafeImage";
 
 function Categories() {
   return (
-    <section className="section-shell section-stack">
+    <section className="home-categories home-section section-shell">
       <div className="mb-16 max-w-4xl">
         <p className="mb-5 font-semibold text-[#1f7a3a]">Secciones</p>
         <h2 className="text-3xl font-extrabold leading-[1.15] md:text-5xl">
@@ -13,12 +13,12 @@ function Categories() {
         </h2>
       </div>
 
-      <div className="grid gap-10 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3">
         {audienceSections.map((section) => (
           <Link
             key={section.title}
             to={section.to}
-            className="group relative min-h-[360px] overflow-hidden rounded-lg bg-[#102116]"
+            className="audience-tile group relative overflow-hidden rounded-lg bg-[#102116]"
           >
             <SafeImage
               src={section.image}
@@ -34,7 +34,7 @@ function Categories() {
         ))}
       </div>
 
-      <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-6">
+      <div className="category-shortcuts mt-8 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         {categoryShortcuts.map((link) => (
           <Link
             key={link.label}
