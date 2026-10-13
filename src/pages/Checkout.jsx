@@ -1,19 +1,26 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
+import CheckoutConfirmation from "../components/checkout/CheckoutConfirmation";
+import CheckoutOrderSummary from "../components/checkout/CheckoutOrderSummary";
 import ShippingProgress from "../components/shipping/ShippingProgress";
 import ShippingSelector from "../components/shipping/ShippingSelector";
-import { getShippingCost } from "../constants/shipping";
+import { getShippingCost, getShippingOption } from "../constants/shipping";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
 import { formatPrice } from "../utils/currency";
+import { validateCheckoutField, validateCheckoutForm } from "../utils/checkoutValidation";
+import "../styles/checkout.css";
 
 function Checkout() {
-  const navigate = useNavigate();
   const { user } = useAuth();
   const { cartItems, clearCart, subtotal, getCartItemKey } = useCart();
   const [selectedShippingId, setSelectedShippingId] = useState("standard");
+  const formRef = useRef(null);
+  const pendingErrorFocusRef = useRef(null);
+  const [errors, setErrors] = useState({});
+  const [simulation, setSimulation] = useState(null);
+  const submittedRef = useRef(false);
 
   const [formData, setFormData] = useState({
     name: user?.name || "",
@@ -24,40 +31,68 @@ function Checkout() {
   const shippingCost = getShippingCost(subtotal, selectedShippingId);
   const total = subtotal + shippingCost;
 
+  useEffect(() => {
+    const fieldName = pendingErrorFocusRef.current;
+    if (!fieldName) return;
+    pendingErrorFocusRef.current = null;
+    formRef.current?.elements.namedItem(fieldName)?.focus();
+  }, [errors]);
+
   function handleChange(e) {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((previous) => ({ ...previous, [name]: value }));
+    if (errors[name]) {
+      setErrors((previous) => ({ ...previous, [name]: validateCheckoutField(name, value) }));
+    }
   }
 
   function handleSubmit(e) {
     e.preventDefault();
+    if (submittedRef.current || cartItems.length === 0) return;
 
-    if (!formData.name || !formData.email || !formData.address) {
-      toast.error("Completa todos los campos");
+    const validation = validateCheckoutForm(formData);
+    setFormData(validation.values);
+    setErrors(validation.errors);
+    const firstInvalidField = Object.keys(validation.errors)[0];
+
+    if (firstInvalidField) {
+      pendingErrorFocusRef.current = firstInvalidField;
       return;
     }
 
-    toast.success("Compra demo simulada con exito");
+    // Freeze only commercial data before clearCart updates the shared context.
+    const snapshot = {
+      items: cartItems.map((item) => ({
+        lineId: getCartItemKey(item),
+        title: item.title,
+        selectedSize: item.selectedSize,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+      shippingTitle: getShippingOption(selectedShippingId).title,
+      subtotal,
+      shippingCost,
+      total,
+    };
+    submittedRef.current = true;
+    setSimulation(snapshot);
+    setFormData({ name: "", email: "", address: "" });
     clearCart();
-
-    setTimeout(() => {
-      navigate("/");
-    }, 1600);
   }
+
+  if (simulation) return <CheckoutConfirmation simulation={simulation} />;
 
   if (cartItems.length === 0) {
     return (
-      <section className="section-shell py-24">
-        <div className="mx-auto max-w-3xl rounded-lg border border-[#d7e3d2] bg-white p-12 text-center">
-          <h1 className="text-3xl font-extrabold">No hay productos para comprar</h1>
-          <p className="mt-4 text-[#667369]">
+      <section className="section-shell checkout-page">
+        <div className="checkout-empty">
+          <h1>No hay productos para comprar</h1>
+          <p>
             Agrega productos al carrito antes de avanzar al checkout.
           </p>
           <Link
             to="/products"
-            className="mt-8 inline-flex rounded-lg bg-[#102116] px-6 py-3 font-bold text-white transition hover:bg-[#1f7a3a]"
+            className="checkout-empty-link"
           >
             Ver productos
           </Link>
@@ -67,14 +102,14 @@ function Checkout() {
   }
 
   return (
-    <section className="section-shell min-h-screen py-24">
-      <p className="mb-5 font-semibold text-[#1f7a3a]">Checkout</p>
-      <h1 className="mb-14 text-4xl font-extrabold leading-[1.15] md:text-5xl">
+    <section className="section-shell checkout-page">
+      <p className="checkout-eyebrow">Checkout</p>
+      <h1 className="checkout-title">
         Finalizar compra
       </h1>
 
       {!user && (
-        <div className="mb-8 rounded-lg border border-[#b9d9b7] bg-[#e8f3e5] p-4 text-[#102116]">
+        <div className="checkout-account-notice">
           <span>Tambien podes </span>
           <Link to="/registro" className="font-bold underline">
             crear una cuenta demo
@@ -83,111 +118,105 @@ function Checkout() {
         </div>
       )}
 
-      <div className="grid gap-12 lg:grid-cols-2">
+      <div className="checkout-layout">
         <form
+          ref={formRef}
+          noValidate
           onSubmit={handleSubmit}
-          className="space-y-6 rounded-lg border border-[#d7e3d2] bg-white p-8 shadow-lg"
+          className="checkout-form"
         >
-          <h2 className="text-2xl font-bold">Datos de envio</h2>
-          <p className="rounded-lg border border-[#b9d9b7] bg-[#e8f3e5] p-4 text-sm font-semibold text-[#102116]">
+          <h2>Datos de envio</h2>
+          <p className="checkout-demo-notice">
             Esta pantalla simula el checkout. No ingreses datos reales de pago:
             no se procesan compras ni se envian pedidos.
           </p>
 
-          <input
-            type="text"
-            name="name"
-            placeholder="Nombre completo"
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-[#d7e3d2] p-4 outline-none transition focus:border-[#1f7a3a]"
-          />
+          <div className="checkout-fields">
+            <div className="checkout-field">
+              <label htmlFor="checkout-name">Nombre completo <span className="checkout-required">Obligatorio</span></label>
+              <input
+                id="checkout-name"
+                type="text"
+                name="name"
+                required
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "checkout-name-error" : undefined}
+                placeholder="Nombre completo"
+                value={formData.name}
+                onChange={handleChange}
+              />
+              {errors.name && <p id="checkout-name-error" className="checkout-field-error">{errors.name}</p>}
+            </div>
 
-          <input
-            type="email"
-            name="email"
-            placeholder="Correo electronico"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full rounded-lg border border-[#d7e3d2] p-4 outline-none transition focus:border-[#1f7a3a]"
-          />
+            <div className="checkout-field">
+              <label htmlFor="checkout-email">Correo electronico <span className="checkout-required">Obligatorio</span></label>
+              <input
+                id="checkout-email"
+                type="email"
+                name="email"
+                required
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={errors.email ? "checkout-email-error" : undefined}
+                placeholder="Correo electronico"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              {errors.email && <p id="checkout-email-error" className="checkout-field-error">{errors.email}</p>}
+            </div>
 
-          <textarea
-            name="address"
-            placeholder="Direccion"
-            value={formData.address}
-            onChange={handleChange}
-            rows="4"
-            className="w-full rounded-lg border border-[#d7e3d2] p-4 outline-none transition focus:border-[#1f7a3a]"
-          />
-
-          <div className="space-y-4 pt-2">
-            <h3 className="text-xl font-bold">Metodo de envio</h3>
-            <ShippingProgress subtotal={subtotal} />
-            <ShippingSelector
-              selectedShippingId={selectedShippingId}
-              subtotal={subtotal}
-              onChange={setSelectedShippingId}
-            />
+            <div className="checkout-field">
+              <label htmlFor="checkout-address">Direccion <span className="checkout-required">Obligatorio</span></label>
+              <textarea
+                id="checkout-address"
+                name="address"
+                required
+                aria-invalid={errors.address ? true : undefined}
+                aria-describedby={errors.address ? "checkout-address-error" : undefined}
+                placeholder="Direccion"
+                value={formData.address}
+                onChange={handleChange}
+                rows="4"
+              />
+              {errors.address && <p id="checkout-address-error" className="checkout-field-error">{errors.address}</p>}
+            </div>
           </div>
 
-          <button
-            type="submit"
-            className="w-full rounded-lg bg-[#102116] py-4 font-bold text-white transition hover:bg-[#1f7a3a]"
-          >
-            Simular compra
-          </button>
+          <div className="checkout-shipping">
+            <fieldset className="checkout-shipping-group">
+              <legend>Metodo de envio</legend>
+              <div className="checkout-shipping-progress">
+                <ShippingProgress subtotal={subtotal} />
+              </div>
+              <div className="checkout-shipping-options">
+                <ShippingSelector
+                  selectedShippingId={selectedShippingId}
+                  subtotal={subtotal}
+                  onChange={setSelectedShippingId}
+                />
+              </div>
+            </fieldset>
+          </div>
+
+          <div className="checkout-actions">
+            <div className="checkout-mobile-total">
+              <span>Total estimado</span>
+              <strong>{formatPrice(total)}</strong>
+            </div>
+            <button
+              type="submit"
+              className="checkout-submit"
+            >
+              Simular compra
+            </button>
+          </div>
         </form>
 
-        <div className="rounded-lg border border-[#d7e3d2] bg-white p-8 shadow-lg">
-          <h2 className="mb-6 text-2xl font-bold">Resumen del pedido</h2>
-
-          <div className="space-y-4">
-            {cartItems.map((item) => (
-              <div
-                key={getCartItemKey(item)}
-                className="flex justify-between gap-4 border-b border-[#d7e3d2] pb-3"
-              >
-                <div>
-                  <p className="font-bold">{item.title}</p>
-                  {item.selectedSize && (
-                    <p className="text-sm font-bold text-[#102116]">
-                      Talle: {item.selectedSize}
-                    </p>
-                  )}
-                  <p className="text-sm text-[#667369]">Cantidad: {item.quantity}</p>
-                </div>
-
-                <span className="font-bold">
-                  {formatPrice(item.price * item.quantity)}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-8 space-y-4 border-t border-[#d7e3d2] pt-6">
-            <div className="flex items-center justify-between">
-              <span className="text-[#667369]">Subtotal</span>
-              <span className="text-xl font-extrabold">
-                {formatPrice(subtotal)}
-              </span>
-            </div>
-
-            <div className="flex items-center justify-between">
-              <span className="text-[#667369]">Envio</span>
-              <span className="text-xl font-extrabold">
-                {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-6 flex items-center justify-between border-t border-[#d7e3d2] pt-6">
-            <span className="text-xl">Total</span>
-            <span className="text-3xl font-extrabold text-[#1f7a3a]">
-              {formatPrice(total)}
-            </span>
-          </div>
-        </div>
+        <CheckoutOrderSummary
+          items={cartItems}
+          subtotal={subtotal}
+          shippingCost={shippingCost}
+          total={total}
+        />
       </div>
     </section>
   );
