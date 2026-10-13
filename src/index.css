@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
 
 @import "./styles/home.css";
+@import "./styles/catalog.css";
+@import "./styles/product-card.css";
+@import "./styles/product-detail.css";
 @import "tailwindcss";
 
 @theme static {

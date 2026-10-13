@@ -1,17 +1,30 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { FaTimes, FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { useEffect } from "react";
+import { useRef, useState } from "react";
 
 import SafeImage from "./common/SafeImage";
 import ShippingProgress from "./shipping/ShippingProgress";
 import { getShippingCost } from "../constants/shipping";
 import useCart from "../hooks/useCart";
+import useModalDialog from "../hooks/useModalDialog";
 import { formatPrice } from "../utils/currency";
+import "../styles/cart-dialog.css";
 
 function CartDrawer() {
+  const cart = useCart();
+
+  return (
+    <AnimatePresence>
+      {cart.isCartOpen && <CartDialog key="cart-dialog" cart={cart} />}
+    </AnimatePresence>
+  );
+}
+
+function CartDialog({ cart }) {
+  const dialogRef = useRef(null);
+  const [stockMessage, setStockMessage] = useState("");
   const {
-    isCartOpen,
     closeCart,
     cartItems,
     removeFromCart,
@@ -19,149 +32,178 @@ function CartDrawer() {
     decreaseQuantity,
     subtotal,
     getCartItemKey,
-  } = useCart();
+  } = cart;
   const shippingCost = getShippingCost(subtotal);
   const total = subtotal + shippingCost;
+  const totalUnits = cartItems.reduce((count, item) => count + item.quantity, 0);
 
-  useEffect(() => {
-    document.body.style.overflow = isCartOpen ? "hidden" : "auto";
-
-    return () => {
-      document.body.style.overflow = "auto";
-    };
-  }, [isCartOpen]);
+  // Keep the native modal open through its existing exit animation.
+  useModalDialog(dialogRef, true, closeCart, undefined, false);
 
   return (
-    <AnimatePresence>
-      {isCartOpen && (
+    <motion.dialog
+      ref={dialogRef}
+      aria-labelledby="cart-dialog-title"
+      tabIndex={-1}
+      onCancel={(event) => {
+        event.preventDefault();
+        closeCart();
+      }}
+      onClick={(event) => {
+        const bounds = event.currentTarget.getBoundingClientRect();
+        if (event.target === event.currentTarget && (
+          event.clientX < bounds.left || event.clientX > bounds.right ||
+          event.clientY < bounds.top || event.clientY > bounds.bottom
+        )) closeCart();
+      }}
+      initial={{ x: 420 }}
+      animate={{ x: 0 }}
+      exit={{ x: 420 }}
+      transition={{ type: "spring", damping: 25, stiffness: 200 }}
+      className="cart-dialog"
+    >
+      <div className="cart-dialog-heading">
+        <h2 id="cart-dialog-title">Tu carrito</h2>
+
+        <button
+          type="button"
+          aria-label="Cerrar carrito"
+          title="Cerrar carrito"
+          onClick={closeCart}
+          className="cart-icon-button"
+        >
+          <FaTimes aria-hidden="true" />
+        </button>
+      </div>
+
+      <p role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+        {totalUnits === 0 ? "Carrito vacio. Subtotal: " : `${totalUnits} unidades en el carrito. Subtotal: `}
+        {formatPrice(subtotal)}. Total: {formatPrice(totalUnits === 0 ? 0 : total)}.
+      </p>
+      <p role="alert" aria-atomic="true" className="cart-stock-message">
+        {stockMessage}
+      </p>
+
+      {cartItems.length === 0 ? (
+        <div className="cart-dialog-empty">
+          Tu carrito esta vacio
+        </div>
+      ) : (
         <>
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={closeCart}
-            className="fixed inset-0 z-40 bg-black/55 backdrop-blur-sm"
-          />
-
-          <motion.aside
-            initial={{ x: 420 }}
-            animate={{ x: 0 }}
-            exit={{ x: 420 }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed bottom-0 right-0 top-0 z-[9999] flex w-full flex-col overflow-hidden bg-white p-6 text-[#111813] shadow-2xl sm:w-[420px]"
-          >
-            <div className="flex items-center justify-between border-b border-[#d7e3d2] pb-4">
-              <h2 className="text-2xl font-extrabold">Tu carrito</h2>
-
-              <button
-                onClick={closeCart}
-                className="text-2xl transition hover:text-[#1f7a3a]"
+          <div className="cart-dialog-list">
+            {cartItems.map((item) => (
+              <div
+                key={getCartItemKey(item)}
+                className="cart-line cart-drawer-line"
               >
-                <FaTimes />
-              </button>
-            </div>
+                <div className="cart-line-image">
+                  <SafeImage
+                    src={item.image}
+                    alt={item.title}
+                    className="h-full w-full object-contain"
+                  />
+                </div>
 
-            {cartItems.length === 0 ? (
-              <div className="flex flex-1 items-center justify-center text-[#667369]">
-                Tu carrito esta vacio
-              </div>
-            ) : (
-              <>
-                <div className="min-h-0 flex-1 space-y-4 overflow-y-auto py-5">
-                  {cartItems.map((item) => (
-                    <div
-                      key={getCartItemKey(item)}
-                      className="flex gap-4 rounded-lg border border-[#d7e3d2] p-4"
-                    >
-                      <div className="h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-[#e8f3e5]">
-                        <SafeImage
-                          src={item.image}
-                          alt={item.title}
-                          className="h-full w-full object-cover"
-                        />
-                      </div>
+                <div className="cart-line-information">
+                  <h3 className="cart-line-name">{item.title}</h3>
+                  <p className="cart-line-price">
+                    {formatPrice(item.price)}
+                  </p>
+                  {item.selectedSize && (
+                    <p className="cart-line-size">
+                      Talle: {item.selectedSize}
+                    </p>
+                  )}
+                  <p className="cart-line-stock">
+                    {item.selectedSize
+                      ? `Stock talle: ${item.stock}`
+                      : `Stock: ${item.stock}`}
+                  </p>
 
-                      <div className="min-w-0 flex-1">
-                        <h3 className="line-clamp-2 font-bold">{item.title}</h3>
-                        <p className="mt-1 text-sm font-semibold text-[#1f7a3a]">
-                          {formatPrice(item.price)}
-                        </p>
-                        {item.selectedSize && (
-                          <p className="mt-1 text-xs font-bold text-[#102116]">
-                            Talle: {item.selectedSize}
-                          </p>
-                        )}
-                        <p className="mt-1 text-xs text-[#667369]">
-                          {item.selectedSize
-                            ? `Stock talle: ${item.stock}`
-                            : `Stock: ${item.stock}`}
-                        </p>
-
-                        <div className="mt-3 flex items-center gap-3">
-                          <button
-                            onClick={() => decreaseQuantity(getCartItemKey(item))}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
-                          >
-                            -
-                          </button>
-                          <span className="font-bold">{item.quantity}</span>
-                          <button
-                            onClick={() => increaseQuantity(getCartItemKey(item))}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#d7e3d2] transition hover:border-[#1f7a3a]"
-                          >
-                            +
-                          </button>
-                        </div>
-                      </div>
-
+                  <div className="cart-line-actions">
+                    <div className="cart-quantity">
                       <button
-                        onClick={() => removeFromCart(getCartItemKey(item))}
-                        className="text-red-500 transition hover:text-red-700"
+                        type="button"
+                        aria-label={`Disminuir cantidad de ${item.title}${item.selectedSize ? `, talle ${item.selectedSize}` : ""}`}
+                        onClick={() => {
+                          setStockMessage("");
+                          decreaseQuantity(getCartItemKey(item));
+                        }}
+                        className="cart-quantity-button"
                       >
-                        <FaTrash />
+                        -
+                      </button>
+                      <span className="cart-quantity-value">{item.quantity}</span>
+                      <button
+                        type="button"
+                        aria-label={`Aumentar cantidad de ${item.title}${item.selectedSize ? `, talle ${item.selectedSize}` : ""}`}
+                        onClick={() => {
+                          // The existing toast is outside the native modal's accessible tree.
+                          setStockMessage(item.quantity >= item.stock
+                            ? `Solo hay ${item.stock} unidades disponibles`
+                            : "");
+                          increaseQuantity(getCartItemKey(item));
+                        }}
+                        className="cart-quantity-button"
+                      >
+                        +
                       </button>
                     </div>
-                  ))}
+                    <button
+                      type="button"
+                      aria-label={`Eliminar ${item.title}${item.selectedSize ? `, talle ${item.selectedSize}` : ""} del carrito`}
+                      title={`Eliminar ${item.title}${item.selectedSize ? `, talle ${item.selectedSize}` : ""}`}
+                      onClick={() => {
+                        setStockMessage("");
+                        removeFromCart(getCartItemKey(item));
+                      }}
+                      className="cart-icon-button cart-remove-button"
+                    >
+                      <FaTrash aria-hidden="true" />
+                    </button>
+                  </div>
                 </div>
+              </div>
+            ))}
+          </div>
 
-                <div className="border-t border-[#d7e3d2] pt-6">
-                  <ShippingProgress subtotal={subtotal} />
+          <div className="cart-summary cart-dialog-summary">
+            <div className="cart-shipping-progress">
+              <ShippingProgress subtotal={subtotal} />
+            </div>
 
-                  <div className="mt-5 flex items-center justify-between">
-                    <span className="text-[#667369]">Subtotal</span>
-                    <span className="text-xl font-extrabold">
-                      {formatPrice(subtotal)}
-                    </span>
-                  </div>
+            <div className="cart-summary-row">
+              <span>Subtotal</span>
+              <span>
+                {formatPrice(subtotal)}
+              </span>
+            </div>
 
-                  <div className="mt-3 flex items-center justify-between">
-                    <span className="text-[#667369]">Envio</span>
-                    <span className="font-bold">
-                      {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
-                    </span>
-                  </div>
+            <div className="cart-summary-row">
+              <span>Envio</span>
+              <span>
+                {shippingCost === 0 ? "Gratis" : formatPrice(shippingCost)}
+              </span>
+            </div>
 
-                  <div className="mb-6 mt-5 flex items-center justify-between border-t border-[#d7e3d2] pt-5">
-                    <span className="text-[#667369]">Total</span>
-                    <span className="text-3xl font-extrabold">
-                      {formatPrice(total)}
-                    </span>
-                  </div>
+            <div className="cart-summary-total">
+              <span>Total</span>
+              <span>
+                {formatPrice(total)}
+              </span>
+            </div>
 
-                  <Link
-                    to="/checkout"
-                    onClick={closeCart}
-                    className="block w-full rounded-lg bg-[#102116] py-4 text-center font-bold text-white transition hover:bg-[#1f7a3a]"
-                  >
-                    Finalizar compra
-                  </Link>
-                </div>
-              </>
-            )}
-          </motion.aside>
+            <Link
+              to="/checkout"
+              onClick={closeCart}
+              className="cart-checkout-button"
+            >
+              Finalizar compra
+            </Link>
+          </div>
         </>
       )}
-    </AnimatePresence>
+    </motion.dialog>
   );
 }
 

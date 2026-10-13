@@ -1,13 +1,17 @@
-import { FaChevronDown, FaShoppingBag, FaUserCircle } from "react-icons/fa";
+import { useCallback, useState } from "react";
+import { FaBars, FaChevronDown, FaShoppingBag, FaUserCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 import { mainNavigationItems } from "../config/navigation";
 import useAuth from "../hooks/useAuth";
 import useCart from "../hooks/useCart";
+import MobileMenu from "./MobileMenu";
 
 function Navbar() {
   const { totalItems, openCart } = useCart();
   const { user, logoutUser } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const closeMenu = useCallback(() => setIsMenuOpen(false), []);
 
   return (
     <header className="store-header fixed left-0 top-0 z-50 w-full">
@@ -23,7 +27,7 @@ function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="store-actions flex items-center gap-3">
             <Link
               to="/registro"
               aria-label="Cuenta"
@@ -59,9 +63,23 @@ function Navbar() {
                 </span>
               )}
             </button>
+
+            <button
+              type="button"
+              className="mobile-menu-trigger"
+              aria-label="Abrir menu"
+              title="Abrir menu"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-navigation"
+              aria-haspopup="dialog"
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <FaBars aria-hidden="true" />
+            </button>
           </div>
         </div>
       </div>
+      <MobileMenu isOpen={isMenuOpen} onClose={closeMenu} />
     </header>
   );
 }

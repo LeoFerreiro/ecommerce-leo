@@ -4,8 +4,8 @@ import { footerNavigationLinks } from "../config/navigation";
 
 function Footer() {
   return (
-    <footer className="border-t border-[#d7e3d2] bg-white py-10">
-      <div className="section-shell flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <footer className="store-footer">
+      <div className="section-shell footer-layout">
         <div>
           <p className="text-xl font-extrabold text-[#102116]">
             Verde<span className="text-[#1f7a3a]">Sport</span>
@@ -15,7 +15,7 @@ function Footer() {
           </p>
         </div>
 
-        <div className="flex flex-wrap gap-3 text-sm font-bold text-[#667369]">
+        <nav className="footer-links" aria-label="Navegacion del pie de pagina">
           {footerNavigationLinks.map((link) => (
             <Link
               key={link.label}
@@ -25,7 +25,7 @@ function Footer() {
               {link.label}
             </Link>
           ))}
-        </div>
+        </nav>
       </div>
     </footer>
   );
