@@ -1,4 +1,4 @@
-import products from "../data/products";
+import products from "../data/products.js";
 
 export async function getProducts() {
   return products;

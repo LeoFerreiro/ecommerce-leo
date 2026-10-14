@@ -10,6 +10,7 @@ import useCheckoutForm from "./hooks/useCheckoutForm";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 import ProductDetails from "./pages/ProductDetails";
 import Products from "./pages/Products";
 import Register from "./pages/Register";
@@ -35,6 +36,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/checkout" element={<Checkout checkoutForm={checkoutForm} />} />
             <Route path="/registro" element={<Register />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
 
           <Footer />

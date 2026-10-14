@@ -2,7 +2,7 @@ import {
   defaultProductFilters,
   productFilterQueryKeys,
   productSearchKeys,
-} from "../constants/productFilters";
+} from "../constants/productFilters.js";
 
 export function getUniqueValues(products, key) {
   return [...new Set(products.map((product) => product[key]).filter(Boolean))];
@@ -34,9 +34,17 @@ export function getProductFilterOptions(products) {
   };
 }
 
+function parsePriceBound(value, fallback) {
+  if (value == null || (typeof value === "string" && value.trim() === "")) return fallback;
+  if (typeof value !== "string" && typeof value !== "number") return NaN;
+  const amount = Number(value);
+  return Number.isFinite(amount) && amount >= 0 ? amount : NaN;
+}
+
 export function filterProducts(products, filters) {
-  const minPrice = Number(filters.minPrice) || 0;
-  const maxPrice = Number(filters.maxPrice) || Infinity;
+  const minPrice = parsePriceBound(filters.minPrice, 0);
+  const maxPrice = parsePriceBound(filters.maxPrice, Infinity);
+  if (Number.isNaN(minPrice) || Number.isNaN(maxPrice) || minPrice > maxPrice) return [];
   const normalizedSearch = filters.search.trim().toLowerCase();
 
   return products.filter((product) => {

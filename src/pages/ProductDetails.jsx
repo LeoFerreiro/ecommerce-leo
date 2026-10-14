@@ -4,6 +4,7 @@ import { FaShoppingBag } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
 
 import SafeImage from "../components/common/SafeImage";
+import PageEmptyState from "../components/common/PageEmptyState";
 import ProductDetailPricing from "../components/product/ProductDetailPricing";
 import ProductSizeSelector from "../components/product/ProductSizeSelector";
 import { getAvailableSizes, getSizeStock, getTotalStock } from "../constants/productSizes";
@@ -13,26 +14,48 @@ import { getProduct } from "../services/api";
 function ProductDetails() {
   const { id } = useParams();
   const { addToCart } = useCart();
-  const [product, setProduct] = useState(null);
+  const [loaded, setLoaded] = useState({ id: null, status: "loading", product: null });
   const [selectedSize, setSelectedSize] = useState("");
 
   useEffect(() => {
+    let active = true;
     async function loadProduct() {
-      const data = await getProduct(id);
-      setProduct(data);
-      setSelectedSize("");
+      try {
+        const data = await getProduct(id);
+        if (active) {
+          setLoaded({ id, status: data ? "found" : "missing", product: data });
+          setSelectedSize("");
+        }
+      } catch {
+        if (active) setLoaded({ id, status: "error", product: null });
+      }
     }
 
     loadProduct();
+    return () => { active = false; };
   }, [id]);
 
-  if (!product) {
+  const status = loaded.id === id ? loaded.status : "loading";
+  if (status === "loading") {
     return (
       <div className="product-detail-loading" role="status">
         Cargando producto...
       </div>
     );
   }
+
+  if (status !== "found") {
+    return (
+      <PageEmptyState
+        title={status === "missing" ? "Producto no encontrado" : "No pudimos cargar el producto"}
+        description={status === "missing"
+          ? "El producto que buscas no esta disponible en este catalogo."
+          : "Intenta nuevamente o explora los productos del catalogo."}
+      />
+    );
+  }
+
+  const product = loaded.product;
 
   const totalStock = getTotalStock(product);
   const hasStock = totalStock > 0;
