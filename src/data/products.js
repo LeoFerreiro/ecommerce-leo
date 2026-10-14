@@ -1,7 +1,7 @@
 const products = [
   {
     id: 1,
-    title: "Campera Nike Trail Windrunner",
+    title: "Campera Nike Sportswear Windrunner",
     price: 189999,
     originalPrice: 229999,
     stock: 8,
@@ -17,7 +17,7 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw52fc82a0/products/NIDA0001-077/NIDA0001-077-1.JPG",
     description:
-      "Campera liviana con proteccion contra viento, ideal para entrenar al aire libre.",
+      "Campera con capucha de la linea Sportswear Windrunner, con tejido liviano y diseno inspirado en el modelo original.",
   },
   {
     id: 2,
@@ -46,11 +46,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw9197bb92/products/ADHQ9344/ADHQ9344-1.JPG",
     description:
-      "Zapatillas de running con amortiguacion reactiva y ajuste comodo para uso diario.",
+      "Zapatillas de running con amortiguacion Light BOOST V2 y exterior PRIMEKNIT, pensadas para correr en asfalto.",
   },
   {
     id: 3,
-    title: "Mochila Puma Training Core",
+    title: "Mochila Puma Phase Backpack",
     price: 79999,
     originalPrice: 99999,
     stock: 20,
@@ -65,11 +65,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dwb97f7b1d/products/PU091164-01/PU091164-01-1.JPG",
     description:
-      "Mochila resistente con compartimentos amplios para entrenamiento, trabajo o viaje.",
+      "Mochila con compartimento principal, bolsillo frontal con cierre y bolsillo lateral de malla para organizar tus cosas de todos los dias.",
   },
   {
     id: 4,
-    title: "Top Nike Swoosh Medium Support",
+    title: "Top Nike Swoosh Medium Support con relleno",
     price: 68999,
     stock: 10,
     stockBySize: { XS: 1, S: 2, M: 2, L: 2, XL: 2, XXL: 1 },
@@ -84,11 +84,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dwdaa3c335/products/NIDX6821-309/NIDX6821-309-1.JPG",
     description:
-      "Top deportivo con soporte medio, tejido respirable y calce firme para rutinas intensas.",
+      "Top deportivo de soporte medio con relleno cosido y tecnologia Dri-FIT, pensado para entrenamientos y clases de baile.",
   },
   {
     id: 5,
-    title: "Zapatillas Puma Mayze Sport",
+    title: "Zapatillas Puma Mayze Classic",
     price: 156999,
     originalPrice: 185999,
     stock: 7,
@@ -113,11 +113,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw2d800a1b/products/PU310966-01/PU310966-01-1.JPG",
     description:
-      "Silueta urbana con plataforma sutil, pensada para looks deportivos de todos los dias.",
+      "Zapatillas urbanas de cana baja, con exterior de cuero y suela de plataforma para completar tus looks de todos los dias.",
   },
   {
     id: 6,
-    title: "Gorra Adidas Performance",
+    title: "Gorra Adidas Argentina Dad Cap",
     price: 42999,
     stock: 18,
     audience: "mujer",
@@ -131,11 +131,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw16e499e4/products/AD_HM6663/AD_HM6663-1.JPG",
     description:
-      "Gorra liviana con visera curva y ajuste posterior para protegerte durante el juego.",
+      "Gorra Argentina Dad Cap para llevar el estilo de la Seleccion Argentina en tus looks de todos los dias.",
   },
   {
     id: 7,
-    title: "Buzo Kids Adidas Essentials",
+    title: "Buzo Adidas Essentials con capucha y cierre Kids",
     price: 74999,
     stock: 9,
     stockBySize: { XS: 1, S: 2, M: 2, L: 2, XL: 1, XXL: 1 },
@@ -150,11 +150,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw95791fa2/products/ADJD6493/ADJD6493-1.JPG",
     description:
-      "Buzo suave y abrigado para uso escolar, juegos y salidas de fin de semana.",
+      "Buzo infantil de la linea Essentials, con capucha y cierre frontal para acompanar las actividades de todos los dias.",
   },
   {
     id: 8,
-    title: "Zapatillas Nike Court Borough Kids",
+    title: "Zapatillas Nike Court Borough Low 2 Kids",
     price: 92999,
     originalPrice: 115999,
     stock: 6,
@@ -178,11 +178,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dwe0042971/products/NI_BQ5448-110/NI_BQ5448-110-1.JPG",
     description:
-      "Zapatillas resistentes para chicos, con inspiracion basket y suela de gran agarre.",
+      "Zapatillas infantiles de perfil bajo, con exterior de cuero y diseno inspirado en el basquet retro para uso cotidiano.",
   },
   {
     id: 9,
-    title: "Botella Puma Hydration 750ml",
+    title: "Botella Puma Studio Bottle 750 ml",
     price: 28999,
     stock: 25,
     audience: "kids",
@@ -196,11 +196,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dwa9d28a3d/products/PU079470-02/PU079470-02-1.JPG",
     description:
-      "Botella reutilizable, liviana y facil de transportar para escuela o entrenamiento.",
+      "Botella termica reutilizable de 750 ml, con tapa a rosca para llevar tus bebidas durante el dia.",
   },
   {
     id: 10,
-    title: "Camiseta Puma Team Final",
+    title: "Camiseta Puma individualFINAL",
     price: 86999,
     stock: 11,
     stockBySize: { XS: 1, S: 2, M: 3, L: 2, XL: 2, XXL: 1 },
@@ -215,11 +215,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw29ee9966/products/PU660424-01/PU660424-01-1.JPG",
     description:
-      "Camiseta tecnica de futbol con secado rapido y ajuste comodo para partido o entrenamiento.",
+      "Camiseta de futbol de la linea individualFINAL, con mangas cortas y tecnologia dryCELL para tus entrenamientos.",
   },
   {
     id: 11,
-    title: "Calza Adidas Believe This",
+    title: "Calza Adidas Believe This 2.0 3/4",
     price: 98999,
     originalPrice: 125999,
     stock: 5,
@@ -235,11 +235,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dwbed72220/products/AD_H65793/AD_H65793-1.JPG",
     description:
-      "Calza elastizada de tiro alto, pensada para movilidad, yoga y entrenamiento funcional.",
+      "Calza de largo tres cuartos y tiro alto, con ajuste de compresion y tecnologia AEROREADY para entrenar con comodidad.",
   },
   {
     id: 12,
-    title: "Bolso Nike Brasilia Duffel",
+    title: "Bolso Nike Brasilia 9.5",
     price: 69999,
     stock: 14,
     audience: "mujer",
@@ -253,11 +253,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw136f1668/products/NI_DM3976-010/NI_DM3976-010-1.JPG",
     description:
-      "Bolso compacto con correa ajustable y espacio para zapatillas, ropa y accesorios.",
+      "Bolso de entrenamiento de la linea Brasilia 9.5 para llevar ropa y accesorios deportivos.",
   },
   {
     id: 13,
-    title: "Botines Nike Mercurial Vapor Club",
+    title: "Botines Nike Mercurial Vapor 14 Academy TF",
     price: 138999,
     originalPrice: 168999,
     stock: 4,
@@ -283,7 +283,7 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw744391c7/products/NI_DJ2879-054/NI_DJ2879-054-1.JPG",
     description:
-      "Botines para futbol con traccion firme, ajuste veloz y perfil liviano para cancha.",
+      "Botines de futbol de perfil bajo, con suela TF para jugar en superficies de cesped sintetico corto.",
   },
   {
     id: 14,
@@ -312,11 +312,11 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw22e74dc8/products/AD_B43827/AD_B43827-1.JPG",
     description:
-      "Ojotas comodas para pileta, vestuario o descanso despues de entrenar.",
+      "Ojotas con plantilla moldeada y suela de EVA, pensadas para descansar despues de entrenar o usar todos los dias.",
   },
   {
     id: 15,
-    title: "Botines Puma Future Match",
+    title: "Botines Puma FUTURE Match FG/AG Youth",
     price: 126999,
     stock: 3,
     stockBySize: {
@@ -339,7 +339,7 @@ const products = [
     image:
       "https://www.dexter.com.ar/on/demandware.static/-/Sites-365-dabra-catalog/default/dw2e4b013e/products/PU107623-03/PU107623-03-1.JPG",
     description:
-      "Botines kids con buen agarre y estructura flexible para entrenamientos y partidos.",
+      "Botines juveniles de la linea FUTURE Match, con suela FG/AG para jugar en pasto natural y artificial.",
   },
 ];
 
