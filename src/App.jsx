@@ -5,6 +5,8 @@ import DemoNotice from "./components/DemoNotice";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import { CartProvider } from "./context/CartContext";
+import useAuth from "./hooks/useAuth";
+import useCheckoutForm from "./hooks/useCheckoutForm";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Home from "./pages/Home";
@@ -13,6 +15,9 @@ import Products from "./pages/Products";
 import Register from "./pages/Register";
 
 function App() {
+  const { user } = useAuth();
+  const checkoutForm = useCheckoutForm(user);
+
   return (
     <CartProvider>
       <BrowserRouter>
@@ -28,7 +33,7 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/product/:id" element={<ProductDetails />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/checkout" element={<Checkout checkoutForm={checkoutForm} />} />
             <Route path="/registro" element={<Register />} />
           </Routes>
 

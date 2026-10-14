@@ -1,0 +1,49 @@
+.account-page { padding-block: 32px 48px; }
+.account-register-layout { display: grid; gap: 24px; align-items: start; }
+.account-heading, .account-form { min-width: 0; }
+.account-eyebrow { margin-bottom: 8px; color: var(--color-brand); font-size: 13px; font-weight: 600; }
+.account-title { max-width: 520px; font-size: 24px; font-weight: 700; line-height: 1.3; overflow-wrap: anywhere; }
+.account-description { max-width: 520px; margin-top: 12px; color: var(--color-ink-muted); font-size: 13px; line-height: 1.7; }
+.account-form { padding: 20px; border: 1px solid var(--color-line); border-radius: 8px; background: var(--color-surface); }
+.account-fields, .account-password-fields { display: grid; gap: 16px; min-width: 0; }
+.account-field { display: block; min-width: 0; }
+.account-field-label { display: block; margin-bottom: 8px; color: var(--color-ink); font-size: 13px; font-weight: 500; }
+.account-required { margin-left: 6px; color: var(--color-ink-muted); font-size: 11px; font-weight: 400; }
+.account-field-error { margin-top: 8px; color: #a12626; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.account-input-wrap.account-input-error { border-color: #a12626; }
+.account-input-wrap { display: flex; align-items: center; gap: 10px; min-width: 0; padding-inline: 12px; border: 1px solid var(--color-line); border-radius: 6px; background: var(--color-surface); transition: border-color 160ms; }
+.account-field-icon { flex-shrink: 0; color: var(--color-brand); font-size: 14px; }
+.account-input { width: 100%; min-width: 0; height: 48px; background: transparent; color: var(--color-ink); font-size: 16px; }
+.account-input::placeholder { color: #64716a; opacity: 1; }
+.account-input-wrap:hover, .account-input-wrap:focus-within { border-color: var(--color-brand); }
+.account-input-wrap:focus-within { outline: 2px solid var(--color-brand); outline-offset: 3px; }
+.account-input:focus-visible { outline: none; }
+.account-help { margin-top: 16px; color: var(--color-ink-muted); font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; }
+.account-email-help { padding-top: 16px; border-top: 1px solid var(--color-line); }
+.account-button { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 12px 20px; border: 1px solid transparent; border-radius: 6px; font-size: 14px; font-weight: 600; line-height: 1.5; text-align: center; transition: background-color 160ms, border-color 160ms; }
+.account-button-primary { background: #102f20; color: white; }
+.account-button-primary:hover { background: var(--color-brand); }
+.account-button-secondary { border-color: var(--color-line); background: var(--color-surface); color: var(--color-ink); }
+.account-button-secondary:hover { border-color: var(--color-brand); }
+.account-submit { width: 100%; margin-top: 20px; }
+.account-profile { max-width: 820px; }
+.account-profile .account-title, .account-profile .account-description { max-width: none; }
+.account-details { margin-top: 24px; padding-block: 24px; border-block: 1px solid var(--color-line); min-width: 0; }
+.account-user-name { font-size: 20px; font-weight: 600; line-height: 1.5; overflow-wrap: anywhere; }
+.account-user-email { margin-top: 6px; color: var(--color-ink-muted); font-size: 14px; line-height: 1.7; overflow-wrap: anywhere; }
+.account-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 24px; }
+@media (min-width: 640px) {
+  .account-password-fields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1024px) {
+  .account-page { padding-block: 40px 64px; }
+  .account-register-layout { grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); gap: 40px; }
+  .account-title { font-size: 30px; }
+  .account-form { padding: 24px; }
+}
+@media (max-width: 359px) {
+  .account-form { padding: 16px; }
+}
+@media (max-width: 479px) {
+  .account-actions { flex-direction: column; }
+}

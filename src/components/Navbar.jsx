@@ -35,7 +35,7 @@ function Navbar() {
               className="inline-flex items-center gap-2 rounded-lg border border-[#d7e3d2] px-3 py-2 font-semibold text-[#1f2a22] transition hover:border-[#1f7a3a] hover:text-[#1f7a3a]"
             >
               <FaUserCircle />
-              <span className="hidden sm:inline">
+              <span className="hidden min-w-0 max-w-24 truncate sm:block">
                 {user ? user.name.split(" ")[0] : "Cuenta"}
               </span>
             </Link>

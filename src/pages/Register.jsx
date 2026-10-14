@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 import useAuth from "../hooks/useAuth";
-import { isValidEmail, isValidPassword } from "../utils/validation";
+import { validateRegistrationForm } from "../utils/validation";
+import "../styles/account.css";
 
 const initialForm = {
   name: "",
@@ -17,185 +18,199 @@ function Register() {
   const { user, registerUser, logoutUser } = useAuth();
   const navigate = useNavigate();
   const [formData, setFormData] = useState(initialForm);
+  const [errors, setErrors] = useState({});
+  const formRef = useRef(null);
+  const attemptedRef = useRef(false);
+  const pendingErrorFocusRef = useRef(null);
+
+  useEffect(() => {
+    const fieldName = pendingErrorFocusRef.current;
+    if (!fieldName) return;
+    pendingErrorFocusRef.current = null;
+    formRef.current?.elements.namedItem(fieldName)?.focus();
+  }, [errors]);
 
   function handleChange(e) {
-    setFormData({
+    const nextValues = {
       ...formData,
       [e.target.name]: e.target.value,
-    });
+    };
+    setFormData(nextValues);
+    // Revalidate confirmation too when its matching password changes.
+    if (attemptedRef.current) setErrors(validateRegistrationForm(nextValues).errors);
   }
 
   function handleSubmit(e) {
     e.preventDefault();
 
-    if (
-      !formData.name.trim() ||
-      !formData.email.trim() ||
-      !formData.password ||
-      !formData.confirmPassword
-    ) {
-      toast.error("Completa todos los campos");
+    attemptedRef.current = true;
+    const validation = validateRegistrationForm(formData);
+    setFormData(validation.values);
+    setErrors(validation.errors);
+    const firstInvalidField = Object.keys(validation.errors)[0];
+    if (firstInvalidField) {
+      pendingErrorFocusRef.current = firstInvalidField;
       return;
     }
 
-    if (!isValidEmail(formData.email)) {
-      toast.error("Ingresa un email valido de un dominio conocido");
-      return;
-    }
-
-    if (!isValidPassword(formData.password)) {
-      toast.error("La contrasena debe tener 8 a 15 caracteres y 3 tipos distintos");
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Las contrasenas no coinciden");
-      return;
-    }
-
-    registerUser(formData);
+    registerUser(validation.values);
     toast.success("Registro demo creado");
     navigate("/products");
   }
 
   if (user) {
     return (
-      <section className="section-shell section-stack">
-        <div className="grid gap-12 lg:grid-cols-[1fr_0.85fr] lg:items-center">
-          <div>
-            <p className="mb-5 font-semibold text-[#1f7a3a]">Cuenta demo activa</p>
-            <h1 className="text-4xl font-extrabold leading-[1.15] md:text-5xl">
-              Hola, {user.name}. Tu sesion esta lista para probar la tienda.
-            </h1>
-            <p className="mt-5 max-w-2xl text-lg leading-8 text-[#667369]">
-              Esta cuenta vive solamente en memoria. Si cerras o recargas la
-              pagina, los datos de registro desaparecen.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link
-                to="/products"
-                className="rounded-lg bg-[#102116] px-6 py-3 font-bold text-white transition hover:bg-[#1f7a3a]"
-              >
-                Ver productos
-              </Link>
-              <button
-                onClick={logoutUser}
-                className="rounded-lg border border-[#d7e3d2] px-6 py-3 font-bold transition hover:border-[#1f7a3a]"
-              >
-                Cerrar sesion demo
-              </button>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-[#d7e3d2] bg-white p-6 shadow-xl">
-            <p className="text-sm font-bold uppercase tracking-[0.2em] text-[#1f7a3a]">
-              Usuario
-            </p>
-            <h2 className="mt-3 text-2xl font-extrabold">{user.name}</h2>
-            <p className="mt-2 text-[#667369]">{user.email}</p>
-          </div>
+      <section className="section-shell account-page account-profile">
+        <header className="account-heading">
+          <p className="account-eyebrow">Cuenta demo activa</p>
+          <h1 className="account-title">
+            Hola, {user.name}. Tu sesion esta lista para probar la tienda.
+          </h1>
+          <p className="account-description">
+            Esta cuenta vive solamente en memoria. Si cerras o recargas la
+            pagina, los datos de registro desaparecen.
+          </p>
+        </header>
+        <div className="account-details">
+          <p className="account-eyebrow">Usuario</p>
+          <h2 className="account-user-name">{user.name}</h2>
+          <p className="account-user-email">{user.email}</p>
+        </div>
+        <div className="account-actions">
+          <Link
+            to="/products"
+            className="account-button account-button-primary"
+          >
+            Ver productos
+          </Link>
+          <button
+            onClick={logoutUser}
+            className="account-button account-button-secondary"
+          >
+            Cerrar sesion demo
+          </button>
         </div>
       </section>
     );
   }
 
   return (
-    <section className="section-shell section-stack">
-      <div className="grid gap-14 lg:grid-cols-[0.9fr_1fr] lg:items-center">
-        <div>
-          <p className="mb-5 font-semibold text-[#1f7a3a]">Registro demo</p>
-          <h1 className="text-4xl font-extrabold leading-[1.15] md:text-5xl">
+    <section className="section-shell account-page">
+      <div className="account-register-layout">
+        <header className="account-heading">
+          <p className="account-eyebrow">Registro demo</p>
+          <h1 className="account-title">
             Crea una cuenta para guardar tu experiencia durante la demo.
           </h1>
-          <p className="mt-5 text-lg leading-8 text-[#667369]">
+          <p className="account-description">
             Los datos no se guardan en localStorage ni en una base de datos.
             Solo quedan activos mientras la pagina permanece abierta.
           </p>
-          <p className="mt-4 text-sm leading-6 text-[#667369]">
-            Para esta demo validamos emails con formato correcto y dominios
-            comunes como gmail.com, outlook.com, hotmail.com, yahoo.com e
-            icloud.com.
-          </p>
-        </div>
+        </header>
 
         <form
+          ref={formRef}
+          noValidate
           onSubmit={handleSubmit}
-          className="rounded-lg border border-[#d7e3d2] bg-white p-6 shadow-xl md:p-8"
+          className="account-form"
         >
-          <div className="grid gap-5">
-            <FormField icon={<FaUser />} label="Nombre">
+          <div className="account-fields">
+            <FormField name="name" error={errors.name} icon={<FaUser />} label="Nombre">
               <input
+                id="register-name"
+                required
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "register-name-error" : undefined}
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Leo Martinez"
-                className="w-full bg-transparent py-4 outline-none"
+                className="account-input"
               />
             </FormField>
 
-            <FormField icon={<FaEnvelope />} label="Email">
+            <FormField name="email" error={errors.email} icon={<FaEnvelope />} label="Email">
               <input
+                id="register-email"
+                required
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={errors.email ? "register-email-help register-email-error" : "register-email-help"}
                 type="email"
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="leo@email.com"
-                className="w-full bg-transparent py-4 outline-none"
+                className="account-input"
               />
             </FormField>
 
-            <div className="grid gap-5 sm:grid-cols-2">
-              <FormField icon={<FaLock />} label="Contrasena">
+            <div className="account-password-fields">
+              <FormField name="password" error={errors.password} icon={<FaLock />} label="Contrasena">
                 <input
+                  id="register-password"
+                  required
+                  aria-invalid={errors.password ? true : undefined}
+                  aria-describedby={errors.password ? "register-password-help register-password-error" : "register-password-help"}
                   type="password"
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   placeholder="8 a 15 caracteres"
-                  className="w-full bg-transparent py-4 outline-none"
+                  className="account-input"
                 />
               </FormField>
 
-              <FormField icon={<FaLock />} label="Confirmar">
+              <FormField name="confirmPassword" error={errors.confirmPassword} icon={<FaLock />} label="Confirmar">
                 <input
+                  id="register-confirmPassword"
+                  required
+                  aria-invalid={errors.confirmPassword ? true : undefined}
+                  aria-describedby={errors.confirmPassword ? "register-confirmPassword-error" : undefined}
                   type="password"
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Repeti la clave"
-                  className="w-full bg-transparent py-4 outline-none"
+                  className="account-input"
                 />
               </FormField>
             </div>
           </div>
 
-          <p className="mt-5 text-sm leading-6 text-[#667369]">
-            La contrasena debe combinar al menos 3 tipos: minusculas,
-            mayusculas, numeros o simbolos.
+          <p id="register-password-help" className="account-help">
+            Usa de 8 a 15 caracteres y combina al menos tres tipos: minusculas,
+            mayusculas, numeros o simbolos. Los espacios no cuentan como simbolos.
           </p>
 
           <button
             type="submit"
-            className="mt-7 w-full rounded-lg bg-[#102116] py-4 font-bold text-white transition hover:bg-[#1f7a3a]"
+            className="account-button account-button-primary account-submit"
           >
             Crear cuenta demo
           </button>
+          <p id="register-email-help" className="account-help account-email-help">
+            Usa un correo ficticio con formato valido, por ejemplo demo@example.com.
+            No comprobamos si esa direccion existe.
+          </p>
         </form>
       </div>
     </section>
   );
 }
 
-function FormField({ icon, label, children }) {
+function FormField({ name, error, icon, label, children }) {
   return (
-    <label className="block">
-      <span className="mb-2 block text-sm font-bold">{label}</span>
-      <div className="flex items-center gap-3 rounded-lg border border-[#d7e3d2] bg-[#f8faf6] px-4 text-[#111813]">
-        <span className="text-[#1f7a3a]">{icon}</span>
+    <div className="account-field">
+      <label htmlFor={`register-${name}`} className="account-field-label">
+        {label} <span className="account-required">Obligatorio</span>
+      </label>
+      <div className={`account-input-wrap${error ? " account-input-error" : ""}`}>
+        <span className="account-field-icon" aria-hidden="true">{icon}</span>
         {children}
       </div>
-    </label>
+      {error && <p id={`register-${name}-error`} className="account-field-error">{error}</p>}
+    </div>
   );
 }
 

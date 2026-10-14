@@ -12,7 +12,7 @@ import { formatPrice } from "../utils/currency";
 import { validateCheckoutField, validateCheckoutForm } from "../utils/checkoutValidation";
 import "../styles/checkout.css";
 
-function Checkout() {
+function Checkout({ checkoutForm }) {
   const { user } = useAuth();
   const { cartItems, clearCart, subtotal, getCartItemKey } = useCart();
   const [selectedShippingId, setSelectedShippingId] = useState("standard");
@@ -22,11 +22,7 @@ function Checkout() {
   const [simulation, setSimulation] = useState(null);
   const submittedRef = useRef(false);
 
-  const [formData, setFormData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    address: "",
-  });
+  const { formData, setFormData, changeField, resetForm } = checkoutForm;
 
   const shippingCost = getShippingCost(subtotal, selectedShippingId);
   const total = subtotal + shippingCost;
@@ -40,7 +36,7 @@ function Checkout() {
 
   function handleChange(e) {
     const { name, value } = e.target;
-    setFormData((previous) => ({ ...previous, [name]: value }));
+    changeField(name, value);
     if (errors[name]) {
       setErrors((previous) => ({ ...previous, [name]: validateCheckoutField(name, value) }));
     }
@@ -76,7 +72,7 @@ function Checkout() {
     };
     submittedRef.current = true;
     setSimulation(snapshot);
-    setFormData({ name: "", email: "", address: "" });
+    resetForm();
     clearCart();
   }
 
